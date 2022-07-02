@@ -1,0 +1,6 @@
+ServeMe/ServeMe/bin/*
+ServeMe/ServeMe/ClientApp/node_modules/*
+ServeMe/ServeMe/obj/*
+.vs/*
+ServeMe/.vs/*
+ServeMe/ServeMe/ClientApp/.angular/cache/*
