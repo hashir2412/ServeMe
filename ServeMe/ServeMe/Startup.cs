@@ -21,6 +21,12 @@ namespace ServeMe
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+
+            // 2. Register it with a strongly typed object to access it using dependency injection 
+            services.Configure<AppSettings>(appSettingsSection);
+
+            services.AddOptions();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

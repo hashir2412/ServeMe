@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -19,17 +20,19 @@ namespace ServeMe.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly AppSettings _appSettings;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IOptions<AppSettings> appSettings)
         {
             _logger = logger;
+            _appSettings = appSettings.Value;
         }
 
         [HttpGet]
         public async Task<IEnumerable<WeatherForecast>> Get()
         {
             var query = "SELECT * FROM Persons";
-            using (var connection = new SqlConnection("Data Source = servemesystem.database.windows.net, 1433; Initial Catalog = ServeMeSystem; User ID = random1324; Password = Rofh1624$"))
+            using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
             {
                 var companies = await connection.QueryAsync<WeatherForecast>(query);
                 return companies.ToList();

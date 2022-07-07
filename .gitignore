@@ -4,3 +4,5 @@ ServeMe/ServeMe/obj/*
 .vs/*
 ServeMe/.vs/*
 ServeMe/ServeMe/ClientApp/.angular/cache/*
+ServeMe/ServeMe/ClientApp/dist/*
+ServeMe/ServeMe/Properties/*
