@@ -44,7 +44,10 @@ namespace ServeMe
             else
             {
                 app.UseExceptionHandler("/Error");
+                app.UseHsts();
             }
+            app.UseHttpsRedirection();
+
 
             app.UseStaticFiles();
             if (!env.IsDevelopment())
