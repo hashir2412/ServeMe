@@ -1,8 +1,40 @@
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, Inject } from '@angular/core';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
+  constructor(private http: HttpClient) {
+  }
+  // Declare this key and iv values in declaration
+  private key = CryptoJS.enc.Utf8.parse('4512631236589784');
+  private iv = CryptoJS.enc.Utf8.parse('4512631236589784');
+
+  // Methods for the encrypt and decrypt Using AES
+  encryptUsingAES256() {
+    var encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(JSON.stringify("Your Json Object data or string")), this.key, {
+      keySize: 128 / 8,
+      iv: this.iv,
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7
+    });
+    console.log('Encrypted :' + encrypted);
+    this.http.get<boolean>(`api/login?email=asd&password=${encrypted}`).subscribe(result => {
+      console.log(result);
+    }, error => console.error(error));
+    return encrypted;
+  }
+
+  generate() {
+    var encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(JSON.stringify("Your Json Object data or string")), this.key, {
+      keySize: 128 / 8,
+      iv: this.iv,
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7
+    });
+    console.log('Encrypted :' + encrypted);
+  }
 }

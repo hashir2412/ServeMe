@@ -1,0 +1,84 @@
+<app-loading [show$]="loading$"></app-loading>
+<mat-tab-group>
+    <mat-tab label="Register">
+        <ng-template matTabContent>
+            <form (ngSubmit)="onRegisterClick(heroForm)" #heroForm="ngForm">
+                <div fxLayout="column" fxLayoutGap="10px" style="margin: 10px;">
+                    <mat-radio-group color="primary" name="userType" aria-labelledby="example-radio-group-label"
+                        class="example-radio-group" [(ngModel)]="userType">
+                        <mat-radio-button class="example-radio-button" style="margin-right: 10px;"
+                            [value]="type.Customer">
+                            Customer
+                        </mat-radio-button>
+                        <mat-radio-button class="example-radio-button" [value]="type.Vendor">
+                            Vendor
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Name:</mat-label>
+                        <input matInput type="text" name="name" [(ngModel)]="model.name" #myname="ngModel" required>
+                        <mat-error *ngIf="myname.touched && myname.errors?.required">
+                            Name is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Enter your email</mat-label>
+                        <input matInput placeholder="pat@example.com" type="email" name="email"
+                            [(ngModel)]="model.email" #myEmail="ngModel"
+                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+                        <mat-error *ngIf="myEmail.touched">
+                            <span *ngIf="myEmail.errors?.required">Email is a required field</span>
+                            <span *ngIf="myEmail.errors?.pattern">This is not a valid Email</span>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Phone:</mat-label>
+                        <input matInput type="number" name="number" [(ngModel)]="model.phone" #mynumber="ngModel"
+                            required>
+                        <mat-error *ngIf="mynumber.touched && mynumber.errors?.required">
+                            Number is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Enter your password</mat-label>
+                        <input matInput [type]="hide ? 'password' : 'text'" required name="password"
+                            [(ngModel)]="password" #myPassword="ngModel">
+                        <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
+                            [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                        <mat-error *ngIf="myPassword.touched && myPassword.errors?.required">
+                            Password is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-checkbox color="primary" name="receiveUpdates" [(ngModel)]="model.receiveCommunication"
+                        labelPosition="before">Receive Updates
+                    </mat-checkbox>
+                    <ng-container *ngIf="userType === type.Vendor">
+                        <mat-checkbox color="primary" name="agreement" [(ngModel)]="model.agreement"
+                            labelPosition="before" required>Agreement
+                        </mat-checkbox>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Address:</mat-label>
+                            <input matInput type="text" name="address" [(ngModel)]="model.address" #myaddress="ngModel"
+                                required>
+                            <mat-error *ngIf="myaddress.touched && myaddress.errors?.required">
+                                Address is required
+                            </mat-error>
+                        </mat-form-field>
+                    </ng-container>
+                    <div fxFlexAlign="center" fxLayout="row" fxLayoutGap="10px">
+                        <button mat-raised-button type="button" color="primary" (click)="onCancel()">Cancel</button>
+                        <button mat-raised-button type="submit" color="primary">Register</button>
+                    </div>
+                    <app-message [messages$]="messages$"></app-message>
+                </div>
+            </form>
+        </ng-template>
+    </mat-tab>
+    <mat-tab label="Login">
+        <ng-template matTabContent>
+            <app-login (close)="onCancel()"></app-login>
+        </ng-template>
+    </mat-tab>
+</mat-tab-group>
