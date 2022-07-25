@@ -32,6 +32,15 @@ namespace ServeMe
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddScoped<ILoginDomain, LoginDomain>();
+            services.AddScoped<IUserDomain, UserDomain>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICredsRepository, CredsRepository>();
+            services.AddScoped<IVendorDomain, VendorDomain>();
+            services.AddScoped<IVendorRepository, VendorRepository>();
+            services.AddScoped<IServiceRepository, ServiceRepository>();
+            services.AddScoped<IServiceDomain, ServiceDomain>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

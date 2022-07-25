@@ -33,9 +33,18 @@
             >
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/fetch-data']"
-              >Fetch data</a
-            >
+            <a class="nav-link text-dark" [routerLink]="['/fetch-data']">Fetch data</a>
+          </li>
+          <li>
+            <a> <span class="material-icons" [matMenuTriggerFor]="menu">person</span>
+            </a>
+            <mat-menu #menu="matMenu">
+              <ng-container *ngIf="(user$ | async) != null">
+                <button mat-menu-item [routerLink]="['/profile']">View Profile</button>
+                <button mat-menu-item (click)="onLogOut()">Log out</button>
+              </ng-container>
+              <button (click)="openDialog()" mat-menu-item *ngIf="(user$ | async) == null">Register/Login</button>
+            </mat-menu>
           </li>
         </ul>
       </div>
