@@ -6,6 +6,7 @@ import { UserType } from '../constants/user-type.enum';
 import { RegisterUserRequestModel, RegisterVendorRequestModel, UserModel, UserRequestModel, VendorRequestModel } from './registration-login.model';
 import { ApiUrl } from '../constants/api-url.enum';
 import { BaseResponseModel } from '../common/base-response.model';
+import { IDataStore, MemoryStore } from '@svaza/datastore';
 import { Keys } from '../constants/keys.enum';
 import { AES } from 'crypto-ts';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -27,6 +28,7 @@ export class RegistrationLoginComponent implements OnInit {
   loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   messages$: Subject<Message> = new Subject<Message>();
 
+  private store: IDataStore = new MemoryStore();
 
   private key = '4512631236589784';
   private iv = '4512631236589784';
@@ -57,6 +59,8 @@ export class RegistrationLoginComponent implements OnInit {
                 userID: res.body, point: 25, receiveCommunication: this.model.receiveCommunication
                 , email: this.model.email, name: this.model.name, phone: this.model.phone
               }
+              this.store.add<UserRequestModel>(Keys.User, user);
+              localStorage.setItem(Keys.User, JSON.stringify(user));
             } else {
               this.messages$.next({ severity: 'error', summary: 'Error', detail: res.message });
             }
@@ -86,6 +90,8 @@ export class RegistrationLoginComponent implements OnInit {
                 address: this.model.address, agreement: this.model.agreement,
                 totalEarnings: this.model.totalEarnings
               }
+              this.store.add<VendorRequestModel>(Keys.User, vendor);
+              localStorage.setItem(Keys.User, JSON.stringify(vendor));
             } else {
               this.messages$.next({ severity: 'error', summary: 'Error', detail: res.message });
             }

@@ -4,7 +4,11 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ServeMe.Domain;
+using ServeMe.Repository;
 using System;
+using AutoMapper;
+using System.Text.Json;
 
 namespace ServeMe
 {
@@ -20,13 +24,15 @@ namespace ServeMe
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddControllersWithViews().AddNewtonsoftJson().AddJsonOptions(opts => opts.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
             var appSettingsSection = Configuration.GetSection("AppSettings");
 
             // 2. Register it with a strongly typed object to access it using dependency injection 
             services.Configure<AppSettings>(appSettingsSection);
 
             services.AddOptions();
+
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -53,7 +59,10 @@ namespace ServeMe
             else
             {
                 app.UseExceptionHandler("/Error");
+                app.UseHsts();
             }
+            app.UseHttpsRedirection();
+
 
             app.UseStaticFiles();
             if (!env.IsDevelopment())

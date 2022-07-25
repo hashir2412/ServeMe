@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
       this.loading$.next(true);
       this.http.get(`${ApiUrl.Login}?email=${this.email.toLowerCase()}&password=${this.password}&isCustomer=${this.userType === UserType.Customer}`)
         .subscribe((res: BaseResponseModel<object>) => {
-          console.log(res);
+        console.log(res);
           this.loading$.next(false);
           if (res.statusCode === 0) {
             this.messages$.next({ severity: 'success', summary: 'Success', detail: 'Success' });
