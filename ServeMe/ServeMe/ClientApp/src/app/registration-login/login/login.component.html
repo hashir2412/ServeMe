@@ -1,0 +1,35 @@
+<app-loading [show$]="loading$"></app-loading>
+<form (ngSubmit)="onLoginClick(heroForm)" #heroForm="ngForm">
+    <div fxLayout="column" fxLayoutGap="10px" style="margin: 10px;">
+        <mat-radio-group color="primary" name="userType" aria-labelledby="example-radio-group-label"
+            class="example-radio-group" [(ngModel)]="userType">
+            <mat-radio-button class="example-radio-button" style="margin-right: 10px;" [value]="type.Customer">
+                Customer
+            </mat-radio-button>
+            <mat-radio-button class="example-radio-button" [value]="type.Vendor">
+                Vendor
+            </mat-radio-button>
+        </mat-radio-group>
+        <mat-form-field appearance="fill">
+            <mat-label>Enter your email</mat-label>
+            <input matInput placeholder="pat@example.com" type="email" name="email" [(ngModel)]="email"
+                #myEmail="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+            <mat-error *ngIf="myEmail.touched">
+                <span *ngIf="myEmail.errors?.required">Email is a required field</span>
+                <span *ngIf="myEmail.errors?.pattern">This is not a valid Email</span>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Password:</mat-label>
+            <input matInput type="password" name="password" [(ngModel)]="password" #myPassword="ngModel" required>
+            <mat-error *ngIf="myPassword.touched && myPassword.errors?.required">
+                Password is required
+            </mat-error>
+        </mat-form-field>
+        <div fxFlexAlign="center" fxLayout="row" fxLayoutGap="10px">
+            <button mat-raised-button type="button" (click)="onCancel()" color="primary">Cancel</button>
+            <button mat-raised-button type="submit" color="primary">Login</button>
+        </div>
+        <app-message [messages$]="messages$"></app-message>
+    </div>
+</form>
