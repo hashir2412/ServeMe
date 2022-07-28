@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { IDataStore, MemoryStore } from '@svaza/datastore';
 import { BehaviorSubject } from 'rxjs';
 import { AppMemoryStoreService } from '../common/app-memory-store';
 import { Keys } from '../constants/keys.enum';
-import { LoginComponent } from '../registration-login/login/login.component';
 import { RegistrationLoginComponent } from '../registration-login/registration-login.component';
 import { UserModel } from '../registration-login/registration-login.model';
 

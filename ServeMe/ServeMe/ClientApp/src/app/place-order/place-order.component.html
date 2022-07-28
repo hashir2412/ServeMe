@@ -1,0 +1,108 @@
+<!-- <app-loading [show$]="loading$"></app-loading>
+<div fxLayout="column" *ngIf="(items$ | async)!= null">
+    <mat-card class="example-card" *ngFor="let item of items$ | async">
+        <mat-card-title>{{item.service.name}}</mat-card-title>
+        <mat-card-subtitle>{{item.service.rate}}</mat-card-subtitle>
+        <mat-card-content>
+            <p>{{item.date}}</p>
+            <p>{{item.quantity}}</p>
+            <p>{{longText}}</p>
+        </mat-card-content>
+    </mat-card>
+    <app-message [messages$]="messages$"></app-message>
+    <button mat-raised-button type="submit" color="primary">Go to Checkout</button>
+</div>
+
+<ng-container>
+    <form (ngSubmit)="onRegisterClick(heroForm)" #heroForm="ngForm">
+        <div fxLayout="column" fxLayoutGap="10px" style="margin: 10px;">
+            <mat-radio-group color="primary" name="paymentType" aria-labelledby="example-radio-group-label"
+                class="example-radio-group" [(ngModel)]="model.paymentType">
+                <mat-radio-button class="example-radio-button" style="margin-right: 10px;" value="online">
+                    Online
+                </mat-radio-button>
+                <mat-radio-button class="example-radio-button" value="cash">
+                    Cash
+                </mat-radio-button>
+            </mat-radio-group>
+            <mat-form-field appearance="fill">
+                <mat-label>Name:</mat-label>
+                <input matInput type="text" name="name" [(ngModel)]="model.name" #myname="ngModel" required>
+                <mat-error *ngIf="myname.touched && myname.errors?.required">
+                    Name is required
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Card Details:</mat-label>
+                <input matInput type="number" name="number" [(ngModel)]="model.phone" #mynumber="ngModel" required>
+                <mat-error *ngIf="mynumber.touched && mynumber.errors?.required">
+                    Number is required
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Address:</mat-label>
+                <input matInput type="text" name="address" [(ngModel)]="model.address" #myaddress="ngModel" required>
+                <mat-error *ngIf="myaddress.touched && myaddress.errors?.required">
+                    Address is required
+                </mat-error>
+            </mat-form-field>
+            <div fxFlexAlign="center" fxLayout="row" fxLayoutGap="10px">
+                <button mat-raised-button type="button" color="primary" (click)="onCancel()">Cancel</button>
+            <button mat-raised-button type="submit" color="primary" (click)="onPlaceOrder()">Place Order</button>
+            <app-message [messages$]="messages$"></app-message>
+        </div>
+    </form>
+    <mat-stepper linear #stepper>
+        <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
+            <form [formGroup]="firstFormGroup">
+                <ng-template matStepLabel>Fill out your name</ng-template>
+                <mat-form-field appearance="fill">
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="firstCtrl" placeholder="Last name, First name" required>
+                </mat-form-field>
+                <div>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
+            <form [formGroup]="secondFormGroup">
+                <ng-template matStepLabel>Fill out your address</ng-template>
+                <mat-form-field appearance="fill">
+                    <mat-label>Address</mat-label>
+                    <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY" required>
+                </mat-form-field>
+                <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="thirdFormGroup" [editable]="isEditable">
+            <form [formGroup]="thirdFormGroup">
+                <ng-template matStepLabel>Payment</ng-template>
+                <mat-radio-group aria-label="Select an option">
+                    <mat-radio-button value="cash">Cash</mat-radio-button>
+                    <mat-radio-button value="online">Online</mat-radio-button>
+                </mat-radio-group>
+                <mat-form-field appearance="fill" *ngIf="">
+                    <mat-label>Address</mat-label>
+                    <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY" required>
+                </mat-form-field>
+                <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Done</ng-template>
+            <p>You are now done.</p>
+            <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button (click)="stepper.reset()">Reset</button>
+            </div>
+        </mat-step>
+    </mat-stepper>
+</ng-container> -->

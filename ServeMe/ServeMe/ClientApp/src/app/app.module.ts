@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
@@ -13,7 +13,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { LoginComponent } from './registration-login/login/login.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -36,6 +35,9 @@ import { VendorProfileComponent } from './profile/vendor-profile/vendor-profile.
 import { CustomerProfileComponent } from './profile/customer-profile/customer-profile.component';
 import { TableModule } from 'primeng/table';
 import { MatCardModule } from '@angular/material/card';
+import { PlaceOrderComponent } from './place-order/place-order.component';
+import { LoginComponent } from './registration-login/login/login.component';
+import { MatStepperModule } from '@angular/material/stepper';
 
 
 @NgModule({
@@ -51,7 +53,8 @@ import { MatCardModule } from '@angular/material/card';
     MessageComponent,
     ProfileComponent,
     CustomerProfileComponent,
-    VendorProfileComponent
+    VendorProfileComponent,
+    PlaceOrderComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -62,7 +65,8 @@ import { MatCardModule } from '@angular/material/card';
       { path: 'home', component: HomeComponent, },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'profile', component: ProfileComponent, canActivate: [ProfileGuard] }
+      { path: 'profile', component: ProfileComponent, canActivate: [ProfileGuard] },
+      { path: 'cart', component: PlaceOrderComponent }
     ], { relativeLinkResolution: 'legacy', useHash: true }),
     BrowserAnimationsModule,
     MatFormFieldModule,
@@ -80,7 +84,9 @@ import { MatCardModule } from '@angular/material/card';
     MessageModule,
     MatMenuModule,
     TableModule,
-    MatCardModule
+    MatCardModule,
+    MatStepperModule,
+    ReactiveFormsModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true }, AppMemoryStoreService],
   bootstrap: [AppComponent]

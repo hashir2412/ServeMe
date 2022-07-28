@@ -18,7 +18,10 @@ namespace ServeMe.Repository.Models
 
         public DateTime Date { get; set; }
 
-       
+        public OrderDbModel Order { get; set; }
+
+        public UserDbModel User { get; set; }
+
 
     }
 }

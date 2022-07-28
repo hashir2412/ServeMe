@@ -17,5 +17,11 @@ namespace ServeMe.Repository.Models
         public int Quantity { get; set; }
 
         public DateTime Date { get; set; }
+
+        public OrderDbModel Order { get; set; }
+
+        public StatusDbModel Status { get; set; }
+
+        public ServiceDbModel Service { get; set; }
     }
 }

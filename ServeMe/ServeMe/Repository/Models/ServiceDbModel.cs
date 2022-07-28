@@ -13,5 +13,9 @@
         public string Name { get; set; }
 
         public int ServiceCategoryID { get; set; }
+
+        public VendorDbModel Vendor { get; set; }
+
+        public ServiceCategoryDbModel ServiceCategory { get; set; }
     }
 }

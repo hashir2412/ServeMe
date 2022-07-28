@@ -28,9 +28,10 @@ namespace ServeMe
             CreateMap<VendorDbModel, VendorDto>()
     .ForMember(dest => dest.Name, input => input.MapFrom(i => i.VendorName))
     .ReverseMap();
-    //        CreateMap<VendorDto, VendorDbModel>()
-    //.ForMember(dest => dest.VendorName, input => input.MapFrom(i => i.Name))
-    //.ReverseMap();
+            
+            //        CreateMap<VendorDto, VendorDbModel>()
+            //.ForMember(dest => dest.VendorName, input => input.MapFrom(i => i.Name))
+            //.ReverseMap();
             //CreateMap<VendorDbModel, VendorDto>().ForMember(dest => dest.Name, a => a.MapFrom(src => src.VendorName));
             //CreateMap<VendorDbModel, VendorDto>().ForMember(dest => dest.VendorId, a => a.MapFrom(src => src.VendorID));
             //CreateMap<VendorDto, VendorDbModel>().ForMember(dest => dest.VendorID, a => a.MapFrom(src => src.VendorId));

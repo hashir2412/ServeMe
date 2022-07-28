@@ -16,5 +16,9 @@ namespace ServeMe.Repository.Models
 
         public double Total { get; set; }
 
+        public StatusDbModel Status { get; set; }
+
+        public UserDbModel User { get; set; }
+
     }
 }

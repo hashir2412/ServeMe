@@ -1,18 +1,44 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import * as CryptoJS from 'crypto-js';
+import { Message } from 'primeng/api';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { AppMemoryStoreService } from '../common/app-memory-store';
+import { BaseResponseModel } from '../common/base-response.model';
+import { ItemModel, ServiceModel } from '../common/service.model';
+import { ApiUrl } from '../constants/api-url.enum';
+import { Keys } from '../constants/keys.enum';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent implements OnInit {
-  constructor(private http: HttpClient) {
+  cart: ItemModel[] = [];
+  loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  messages$: Subject<Message> = new Subject<Message>();
+  constructor(private http: HttpClient, private store: AppMemoryStoreService) {
   }
+  services$: BehaviorSubject<ServiceModel[]> = new BehaviorSubject<ServiceModel[]>([]);
+  longText = `The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog
+  from Japan. A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was
+  originally bred for hunting.`;
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    this.loading$.next(true);
+    this.http.get<BaseResponseModel<ServiceModel[]>>(ApiUrl.Service).subscribe(res => {
+      this.loading$.next(false);
+      if (res.statusCode === 0) {
+        this.services$.next(res.body);
+      }
+    }, err => {
+      this.loading$.next(false);
+    })
+  }
+
+  onAddToCart(service: ServiceModel) {
+    this.cart.push({ service: service, date: new Date(new Date().setDate(new Date().getDate() + 1)), quantity: 1, rate: service.rate });
+    this.store.add(Keys.Cart,this.cart);
   }
 
   // Declare this key and iv values in declaration

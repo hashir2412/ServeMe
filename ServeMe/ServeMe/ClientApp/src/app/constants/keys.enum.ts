@@ -1,3 +1,4 @@
 export enum Keys {
-    User = 'user'
+    User = 'user',
+    Cart = 'cart'
 }

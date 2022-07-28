@@ -47,6 +47,9 @@ namespace ServeMe
             services.AddScoped<IVendorRepository, VendorRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
             services.AddScoped<IServiceDomain, ServiceDomain>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderDomain, OrderDomain>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

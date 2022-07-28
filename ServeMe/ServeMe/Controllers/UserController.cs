@@ -13,10 +13,12 @@ namespace ServeMe.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserDomain _userDomain;
+        private readonly IOrderDomain _orderDomain;
 
-        public UserController(IUserDomain userDomain)
+        public UserController(IUserDomain userDomain, IOrderDomain paymentDomain)
         {
             _userDomain = userDomain;
+            _orderDomain = paymentDomain;
         }
 
 
@@ -41,6 +43,20 @@ namespace ServeMe.Controllers
             if (ModelState.IsValid)
             {
                 return await _userDomain.Register(registerUserRequestModel.User, registerUserRequestModel.Password);
+            }
+            else
+            {
+                return new ResponseBaseModel<int>() { Body = -1, Message = "Error", StatusCode = 1 };
+            }
+
+        }
+
+        [HttpPost("order")]
+        public async Task<ResponseBaseModel<int>> PlaceOrder(OrderRequestModel order)
+        {
+            if (ModelState.IsValid)
+            {
+                return await _orderDomain.PlaceOrder(order);
             }
             else
             {
