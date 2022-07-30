@@ -64,8 +64,8 @@ namespace ServeMe.Repository
                 var userDto = new UserDto { Name = user.Name, Phone = user.Phone, Email = user.Email, ReceiveCommunication = user.ReceiveCommunication, Point = user.Point };
                 var userDbModel = _mapper.Map<UserDbModel>(userDto);
                 var sql = "INSERT INTO Users (UserName, Phone,Email,ReceiveCommunication,Point) VALUES(@UserName, @Phone,@Email,@ReceiveCommunication,@Point);SELECT CAST(SCOPE_IDENTITY() as int)";
-                var rowsAffected = await connection.QueryFirstOrDefaultAsync<int>(sql, userDbModel);
-                return rowsAffected > 0 ? new ResponseBaseModel<int>() { Body = rowsAffected, Message = "Successfully Registered", StatusCode = 0 } :
+                var idOfNewRow = await connection.QueryFirstOrDefaultAsync<int>(sql, userDbModel);
+                return idOfNewRow > 0 ? new ResponseBaseModel<int>() { Body = idOfNewRow, Message = "Successfully Registered", StatusCode = 0 } :
                     new ResponseBaseModel<int>() { Body = -1, Message = "Failed to register", StatusCode = 1 };
             }
         }

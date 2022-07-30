@@ -71,10 +71,10 @@ namespace ServeMe.Repository
             }
         }
 
-        public async Task<ResponseBaseModel<int>> PlaceOrder(OrderDbModel order, SqlConnection connection)
+        public async Task<ResponseBaseModel<int>> PlaceOrder(OrderDbModel order, SqlConnection connection, SqlTransaction transaction)
         {
-            var sql = "INSERT INTO Orders (UserID,StatusID,Address,Date, Total) VALUES(@UserID, @StatusID,@Address,@Total,@Date);SELECT CAST(SCOPE_IDENTITY() as int)";
-            var rowsAffected = await connection.QueryFirstOrDefaultAsync<int>(sql, order);
+            var sql = "INSERT INTO Orders (UserID,StatusID,Address,Date, Total) VALUES(@UserID, @StatusID,@Address,@Date,@Total);SELECT CAST(SCOPE_IDENTITY() as int)";
+            var rowsAffected = await connection.QueryFirstOrDefaultAsync<int>(sql, order, transaction);
             return rowsAffected > 0 ? new ResponseBaseModel<int>() { Body = rowsAffected, Message = "Successfully Added Order", StatusCode = 0 } :
                 new ResponseBaseModel<int>() { Body = -1, Message = "Failed to add order", StatusCode = 1 };
         }

@@ -21,10 +21,10 @@ namespace ServeMe.Repository
             _appSettings = appSettings.Value;
             _mapper = mapper;
         }
-        public async Task<ResponseBaseModel<int>> AddPayment(PaymentDbModel model, SqlConnection sqlConnection)
+        public async Task<ResponseBaseModel<int>> AddPayment(PaymentDbModel model,SqlConnection sqlConnection, SqlTransaction sqlTransaction)
         {
             var sql = "INSERT INTO Payment (PaymentType, OrderID,UserID,TotalAmount,CommissionDeducted,Date) VALUES(@PaymentType, @OrderID,@UserID,@TotalAmount,@CommissionDeducted,@Date);SELECT CAST(SCOPE_IDENTITY() as int)";
-            var rowsAffected = await sqlConnection.QueryFirstOrDefaultAsync<int>(sql, model);
+            var rowsAffected = await sqlConnection.QueryFirstOrDefaultAsync<int>(sql, model,sqlTransaction);
             return rowsAffected > 0 ? new ResponseBaseModel<int>() { Body = rowsAffected, Message = "Successfully Added Payment", StatusCode = 0 } :
                 new ResponseBaseModel<int>() { Body = -1, Message = "Failed to add payment", StatusCode = 1 };
         }
