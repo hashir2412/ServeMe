@@ -12,7 +12,7 @@ export class UserModel {
 }
 
 export class UserRequestModel{
-    userID?: number;
+    userId?: number;
     name?: string;
     phone?: string;
     email: string;
@@ -31,7 +31,7 @@ export class RegisterVendorRequestModel {
 }
 
 export class VendorRequestModel{
-    vendorID?: number;
+    vendorId?: number;
     name?: string;
     phone?: string;
     email?: string;

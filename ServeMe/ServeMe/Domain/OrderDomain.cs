@@ -69,6 +69,20 @@ namespace ServeMe.Domain
                         }, conn, tran);
                         if (result.StatusCode == 0)
                         {
+                            List<Task> tasks = new List<Task>();
+                            foreach(var cart in order.Items)
+                            {
+                                tasks.Add(_orderRepository.AddToCart(new Repository.Models.CartDbModel()
+                                {
+                                    Date = cart.Date,
+                                    OrderID = result.Body,
+                                    Quantity = cart.Quantity,
+                                    Rate = cart.Rate,
+                                    StatusID = 1,
+                                    ServiceID = cart.Service.ServiceID,
+                                },conn, tran));
+                            }
+                            await Task.WhenAll(tasks);
                             var res = await _paymentRepository.AddPayment(new Repository.Models.PaymentDbModel()
                             {
                                 UserID = order.UserID,

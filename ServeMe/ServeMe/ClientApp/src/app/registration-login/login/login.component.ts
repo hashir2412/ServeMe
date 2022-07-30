@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
             if (this.userType === UserType.Customer) {
               const customer = res.body as UserRequestModel;
               const final: UserModel = {
-                email: customer.email, name: customer.name, phone: customer.phone, userID: customer.userID,
+                email: customer.email, name: customer.name, phone: customer.phone, userID: customer.userId,
                 receiveCommunication: customer.receiveCommunication, isCustomer: true, point: customer.point
               };
               this.store.add<UserModel>(Keys.User, final);
@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
             } else {
               const vendor = res.body as VendorRequestModel;
               const final: UserModel = {
-                email: vendor.email, name: vendor.name, phone: vendor.phone, userID: vendor.vendorID,
+                email: vendor.email, name: vendor.name, phone: vendor.phone, userID: vendor.vendorId,
                 receiveCommunication: vendor.receiveCommunication, isCustomer: false, address: vendor.address,
                 agreement: vendor.agreement, totalEarnings: vendor.totalEarnings
               };

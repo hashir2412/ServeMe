@@ -38,6 +38,7 @@ import { MatCardModule } from '@angular/material/card';
 import { PlaceOrderComponent } from './place-order/place-order.component';
 import { LoginComponent } from './registration-login/login/login.component';
 import { MatStepperModule } from '@angular/material/stepper';
+import { OrdersComponent } from './orders/orders.component';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import { MatStepperModule } from '@angular/material/stepper';
     ProfileComponent,
     CustomerProfileComponent,
     VendorProfileComponent,
-    PlaceOrderComponent
+    PlaceOrderComponent,
+    OrdersComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -66,7 +68,8 @@ import { MatStepperModule } from '@angular/material/stepper';
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'profile', component: ProfileComponent, canActivate: [ProfileGuard] },
-      { path: 'cart', component: PlaceOrderComponent }
+      { path: 'cart', component: PlaceOrderComponent },
+      { path: 'orders', component: OrdersComponent, canActivate: [ProfileGuard] }
     ], { relativeLinkResolution: 'legacy', useHash: true }),
     BrowserAnimationsModule,
     MatFormFieldModule,

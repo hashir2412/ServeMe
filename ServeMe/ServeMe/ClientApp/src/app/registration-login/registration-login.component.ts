@@ -44,7 +44,7 @@ export class RegistrationLoginComponent implements OnInit {
       if (this.userType === UserType.Customer) {
         const userModel: RegisterUserRequestModel = {
           user: {
-            userID: 0, point: 0, receiveCommunication: this.model.receiveCommunication
+            userId: 0, point: 0, receiveCommunication: this.model.receiveCommunication
             , email: this.model.email.toLowerCase(), name: this.model.name, phone: this.model.phone
             // }, password: encrypted.toString()
           }, password: this.password
@@ -56,7 +56,7 @@ export class RegistrationLoginComponent implements OnInit {
             if (res.statusCode === 0) {
               this.messages$.next({ severity: 'success', summary: 'Success', detail: 'User successfully registered. Please login.' });
               let user: UserRequestModel = {
-                userID: res.body, point: 25, receiveCommunication: this.model.receiveCommunication
+                userId: res.body, point: 25, receiveCommunication: this.model.receiveCommunication
                 , email: this.model.email, name: this.model.name, phone: this.model.phone
               }
               this.store.add<UserRequestModel>(Keys.User, user);
@@ -85,7 +85,7 @@ export class RegistrationLoginComponent implements OnInit {
             if (res.statusCode === 0) {
               this.messages$.next({ severity: 'success', summary: 'Success', detail: 'Vendor successfully registered.Please login.' });
               let vendor: VendorRequestModel = {
-                vendorID: res.body, receiveCommunication: this.model.receiveCommunication
+                vendorId: res.body, receiveCommunication: this.model.receiveCommunication
                 , email: this.model.email, name: this.model.name, phone: this.model.phone,
                 address: this.model.address, agreement: this.model.agreement,
                 totalEarnings: this.model.totalEarnings

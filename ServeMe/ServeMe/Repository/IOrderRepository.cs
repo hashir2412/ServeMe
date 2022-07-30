@@ -11,5 +11,7 @@ namespace ServeMe.Repository
         Task<ResponseBaseModel<IEnumerable<OrderDto>>> GetOrdersByUser(int id);
 
         Task<ResponseBaseModel<int>> PlaceOrder(OrderDbModel order, SqlConnection connection, SqlTransaction transaction);
+
+        Task<ResponseBaseModel<int>> AddToCart(CartDbModel cart, SqlConnection connection, SqlTransaction transaction);
     }
 }

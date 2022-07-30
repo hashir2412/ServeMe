@@ -36,6 +36,12 @@ namespace ServeMe.Controllers
             return await _userDomain.GetUserDetails(id);
         }
 
+        [HttpGet("order")]
+        public async Task<ResponseBaseModel<IEnumerable<OrderDto>>> GetUserOrders(int id)
+        {
+            return await _orderDomain.GetOrdersByUser(id);
+        }
+
         // POST api/<UserController>
         [HttpPost]
         public async Task<ResponseBaseModel<int>> Register(RegisterUserRequestModel registerUserRequestModel)

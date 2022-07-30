@@ -28,14 +28,16 @@ namespace ServeMe.Repository
             using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
             {
                 var sql = "select * from Cart inner join Orders on Orders.OrderID = Cart.OrderID " +
-                    "inner join Service on Service.ServiceID = Cart.ServiceID";
+                    "inner join Service on Service.ServiceID = Cart.ServiceID where Orders.UserID = @Id";
+                var parameters = new { Id = id };
+
                 var SalesCartList = await connection.QueryAsync<CartDbModel, OrderDbModel, ServiceDbModel, CartDbModel>(sql,
                     (cart, order, service) =>
                     {
                         cart.Order = order;
                         cart.Service = service;
                         return cart;
-                    }, splitOn: "OrderID,ServiceID"
+                    }, parameters, splitOn: "OrderID,ServiceID"
                     );
                 List<OrderDto> result = new List<OrderDto>();
                 var salesCartGroupedList = SalesCartList.GroupBy(u => u.Order.OrderID)
@@ -77,6 +79,14 @@ namespace ServeMe.Repository
             var rowsAffected = await connection.QueryFirstOrDefaultAsync<int>(sql, order, transaction);
             return rowsAffected > 0 ? new ResponseBaseModel<int>() { Body = rowsAffected, Message = "Successfully Added Order", StatusCode = 0 } :
                 new ResponseBaseModel<int>() { Body = -1, Message = "Failed to add order", StatusCode = 1 };
+        }
+
+        public async Task<ResponseBaseModel<int>> AddToCart(CartDbModel cart, SqlConnection connection, SqlTransaction transaction)
+        {
+            var sql = "INSERT INTO Cart (OrderID,StatusID,ServiceID,Rate, Quantity, Date) VALUES(@OrderID, @StatusID,@ServiceID,@Rate,@Quantity,@Date);SELECT CAST(SCOPE_IDENTITY() as int)";
+            var rowsAffected = await connection.QueryFirstOrDefaultAsync<int>(sql, cart, transaction);
+            return rowsAffected > 0 ? new ResponseBaseModel<int>() { Body = rowsAffected, Message = "Successfully Added to cart", StatusCode = 0 } :
+                new ResponseBaseModel<int>() { Body = -1, Message = "Failed to add cart", StatusCode = 1 };
         }
     }
 }
