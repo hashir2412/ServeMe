@@ -25,15 +25,79 @@ export class HomeComponent implements OnInit {
   from Japan. A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was
   originally bred for hunting.`;
   ngOnInit(): void {
-    this.loading$.next(true);
-    this.http.get<BaseResponseModel<ServiceModel[]>>(ApiUrl.Service).subscribe(res => {
-      this.loading$.next(false);
-      if (res.statusCode === 0) {
-        this.services$.next(res.body);
-      }
-    }, err => {
-      this.loading$.next(false);
-    })
+    // this.loading$.next(true);
+    this.services$.next([{
+      "serviceID": 1,
+      "rateType": 1,
+      "rate": 12,
+      "name": "Maths Professor",
+      "vendorId": 1,
+      "serviceCategoryId": 5
+  },
+  {
+      "serviceID": 2,
+      "rateType": 1,
+      "rate": 15,
+      "name": "Science Professor",
+      "vendorId": 1,
+      "serviceCategoryId": 5
+  },
+  {
+      "serviceID": 3,
+      "rateType": 1,
+      "rate": 18,
+      "name": "Physics Professor",
+      "vendorId": 1,
+      "serviceCategoryId": 5
+  },
+  {
+      "serviceID": 4,
+      "rateType": 1,
+      "rate": 10,
+      "name": "Chemistry Professor",
+      "vendorId": 1,
+      "serviceCategoryId": 5
+  },
+  {
+      "serviceID": 5,
+      "rateType": 1,
+      "rate": 20,
+      "name": "Biology Professor",
+      "vendorId": 1,
+      "serviceCategoryId": 5
+  },
+  {
+    "serviceID": 3,
+    "rateType": 1,
+    "rate": 18,
+    "name": "Physics Professor",
+    "vendorId": 1,
+    "serviceCategoryId": 5
+},
+{
+    "serviceID": 4,
+    "rateType": 1,
+    "rate": 10,
+    "name": "Chemistry Professor",
+    "vendorId": 1,
+    "serviceCategoryId": 5
+},
+{
+    "serviceID": 5,
+    "rateType": 1,
+    "rate": 20,
+    "name": "Biology Professor",
+    "vendorId": 1,
+    "serviceCategoryId": 5
+}]);
+    // this.http.get<BaseResponseModel<ServiceModel[]>>(ApiUrl.Service).subscribe(res => {
+    //   this.loading$.next(false);
+    //   if (res.statusCode === 0) {
+    //     this.services$.next(res.body);
+    //   }
+    // }, err => {
+    //   this.loading$.next(false);
+    // })
   }
 
   onAddToCart(service: ServiceModel) {

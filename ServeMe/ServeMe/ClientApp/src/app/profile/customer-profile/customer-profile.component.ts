@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { UserModel } from 'src/app/registration-login/registration-login.model';
 
 @Component({
   selector: 'app-customer-profile',
@@ -7,6 +8,8 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerProfileComponent implements OnInit {
+
+  model: UserModel = new UserModel();
 
   constructor() { }
 

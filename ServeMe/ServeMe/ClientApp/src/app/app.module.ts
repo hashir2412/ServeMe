@@ -38,6 +38,7 @@ import { MatCardModule } from '@angular/material/card';
 import { PlaceOrderComponent } from './place-order/place-order.component';
 import { LoginComponent } from './registration-login/login/login.component';
 import { MatStepperModule } from '@angular/material/stepper';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 
 @NgModule({
@@ -65,7 +66,7 @@ import { MatStepperModule } from '@angular/material/stepper';
       { path: 'home', component: HomeComponent, },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'profile', component: ProfileComponent, canActivate: [ProfileGuard] },
+      { path: 'profile', component: ProfileComponent},
       { path: 'cart', component: PlaceOrderComponent }
     ], { relativeLinkResolution: 'legacy', useHash: true }),
     BrowserAnimationsModule,
@@ -86,7 +87,8 @@ import { MatStepperModule } from '@angular/material/stepper';
     TableModule,
     MatCardModule,
     MatStepperModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatPaginatorModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true }, AppMemoryStoreService],
   bootstrap: [AppComponent]

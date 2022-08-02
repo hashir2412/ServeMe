@@ -18,6 +18,7 @@
             <a> <span class="material-icons" [matMenuTriggerFor]="menu">person</span>
             </a>
             <mat-menu #menu="matMenu">
+              <button mat-menu-item [routerLink]="['/profile']">View Profile</button>
               <ng-container *ngIf="(user$ | async) != null">
                 <button mat-menu-item [routerLink]="['/profile']">View Profile</button>
                 <button mat-menu-item (click)="onLogOut()">Log out</button>

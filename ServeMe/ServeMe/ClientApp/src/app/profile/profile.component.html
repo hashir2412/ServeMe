@@ -1,4 +1,6 @@
-<ng-container *ngIf="(user$ | async) != null">
+<!-- <ng-container *ngIf="(user$ | async) != null">
     <app-vendor-profile *ngIf="!(user$ | async).isCustomer"></app-vendor-profile>
     <app-customer-profile *ngIf="(user$ | async).isCustomer"></app-customer-profile>
-</ng-container>
+</ng-container> -->
+
+<app-customer-profile></app-customer-profile>
