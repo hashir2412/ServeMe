@@ -8,7 +8,7 @@ namespace ServeMe.Repository.Models
 
         public int ServiceID { get; set; }
 
-        public int OrderID { get; set; }
+        public int CartID { get; set; }
 
         public int UserID { get; set; }
 

@@ -36,6 +36,12 @@ namespace ServeMe.Controllers
             return await _userDomain.GetUserDetails(id);
         }
 
+        [HttpGet("order")]
+        public async Task<ResponseBaseModel<IEnumerable<OrderDto>>> GetUserOrders(int id)
+        {
+            return await _orderDomain.GetOrdersByUser(id);
+        }
+
         // POST api/<UserController>
         [HttpPost]
         public async Task<ResponseBaseModel<int>> Register(RegisterUserRequestModel registerUserRequestModel)
@@ -75,6 +81,12 @@ namespace ServeMe.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        [HttpPost("review")]
+        public async Task<ResponseBaseModel<int>> Post(ReviewsRatingsRequestModel value)
+        {
+            return await _userDomain.AddReview(value);
         }
     }
 }

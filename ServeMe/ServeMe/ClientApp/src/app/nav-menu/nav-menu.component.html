@@ -21,6 +21,7 @@
               <button mat-menu-item [routerLink]="['/profile']">View Profile</button>
               <ng-container *ngIf="(user$ | async) != null">
                 <button mat-menu-item [routerLink]="['/profile']">View Profile</button>
+                <button mat-menu-item [routerLink]="['/orders']">Orders</button>
                 <button mat-menu-item (click)="onLogOut()">Log out</button>
               </ng-container>
               <button (click)="openDialog()" mat-menu-item *ngIf="(user$ | async) == null">Register/Login</button>

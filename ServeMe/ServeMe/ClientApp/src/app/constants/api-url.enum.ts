@@ -2,5 +2,7 @@ export enum ApiUrl {
     User = 'api/user/',
     Vendor = 'api/vendor/',
     Login = 'api/login/',
-    Service = 'api/service'
+    Service = 'api/service',
+    Order = 'api/user/order',
+    Review = 'api/user/review',
 }

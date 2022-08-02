@@ -7,6 +7,6 @@ namespace ServeMe.Repository
 {
     public interface IPaymentRepository
     {
-        Task<ResponseBaseModel<int>> AddPayment(PaymentDbModel model, SqlConnection sqlConnection);
+        Task<ResponseBaseModel<int>> AddPayment(PaymentDbModel model, SqlConnection sqlConnection, SqlTransaction sqlTransaction);
     }
 }

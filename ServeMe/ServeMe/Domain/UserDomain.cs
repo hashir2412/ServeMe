@@ -39,5 +39,10 @@ namespace ServeMe.Domain
                 }
             }
         }
+
+        public async Task<ResponseBaseModel<int>> AddReview(ReviewsRatingsRequestModel value)
+        {
+            return await _userRepository.AddReview(value);
+        }
     }
 }

@@ -9,5 +9,7 @@ namespace ServeMe.Repository
         Task<ResponseBaseModel<UserDto>> GetUserDetails(int id);
 
         Task<ResponseBaseModel<UserDto>> GetUserDetails(string email);
+
+        Task<ResponseBaseModel<int>> AddReview(ReviewsRatingsRequestModel value);
     }
 }

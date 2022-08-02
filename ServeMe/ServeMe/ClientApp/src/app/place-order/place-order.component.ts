@@ -5,6 +5,7 @@ import { Message } from 'primeng/api';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { AppMemoryStoreService } from '../common/app-memory-store';
 import { ItemModel } from '../common/service.model';
+import { ApiUrl } from '../constants/api-url.enum';
 import { Keys } from '../constants/keys.enum';
 
 @Component({
@@ -39,8 +40,30 @@ export class PlaceOrderComponent implements OnInit {
   }
   onPlaceOrder() {
     this.loading$.next(true);
-    // this.http.post()
+    const res: PlaceOrderRequestModel = {
+      address: '21', items: [{
+        date: new Date(), quantity: 1, rate: 12, service: {
+          name: 'Maths Professor', rate: 12, rateType: 1, serviceCategoryId: 5, serviceID: 1, vendorId: 1
+        }
+      },
+      {
+        date: new Date(2022, 7, 1), quantity: 1, rate: 12, service: {
+          name: 'Maths Professor', rate: 12, rateType: 1, serviceCategoryId: 5, serviceID: 1, vendorId: 1
+        }
+      },
+      {
+        date: new Date(2022, 7, 2), quantity: 1, rate: 12, service: {
+          name: 'Maths Professor', rate: 12, rateType: 1, serviceCategoryId: 5, serviceID: 1, vendorId: 1
+        }
+      }], paymentType: 'cash', total: 12, email: 'z@z.com', userId: 0
+    }
+    this.http.post(ApiUrl.Order, res).subscribe(res => {
+      this.loading$.next(false);
+      console.log(res);
+    });
   }
+
+  
 }
 
 
@@ -49,5 +72,7 @@ class PlaceOrderRequestModel {
   paymentType: string;
   total: number;
   address: string;
-  userId?: number;
+  userId: number;
+  name?: string;
+  email: string;
 }

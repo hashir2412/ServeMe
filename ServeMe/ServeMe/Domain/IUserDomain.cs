@@ -8,5 +8,7 @@ namespace ServeMe.Domain
         Task<ResponseBaseModel<int>> Register(UserDto user,string password);
 
         Task<ResponseBaseModel<UserDto>> GetUserDetails(int id);
+
+        Task<ResponseBaseModel<int>> AddReview(ReviewsRatingsRequestModel value);
     }
 }

@@ -38,6 +38,7 @@ import { MatCardModule } from '@angular/material/card';
 import { PlaceOrderComponent } from './place-order/place-order.component';
 import { LoginComponent } from './registration-login/login/login.component';
 import { MatStepperModule } from '@angular/material/stepper';
+import { OrdersComponent } from './orders/orders.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
 
 
@@ -55,7 +56,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     ProfileComponent,
     CustomerProfileComponent,
     VendorProfileComponent,
-    PlaceOrderComponent
+    PlaceOrderComponent,
+    OrdersComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -66,8 +68,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
       { path: 'home', component: HomeComponent, },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'profile', component: ProfileComponent},
-      { path: 'cart', component: PlaceOrderComponent }
+      { path: 'profile', component: ProfileComponent, canActivate: [ProfileGuard] },
+      { path: 'cart', component: PlaceOrderComponent },
+      { path: 'orders', component: OrdersComponent, canActivate: [ProfileGuard] }
     ], { relativeLinkResolution: 'legacy', useHash: true }),
     BrowserAnimationsModule,
     MatFormFieldModule,
