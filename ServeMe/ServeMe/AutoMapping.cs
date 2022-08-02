@@ -14,6 +14,7 @@ namespace ServeMe
     .ReverseMap();
             CreateMap<ServiceDbModel, ServiceDto>().ReverseMap();
             CreateMap<CartDbModel, ItemDto>().ReverseMap();
+            CreateMap<ReviewsRatingsDbModel, ReviewsRatingsRequestModel>().ReverseMap();
             //         CreateMap<UserDbModel, UserDto>()
             //.ForMember(dest => dest.UserId, input => input.MapFrom(i => i.UserID))
             //.ReverseMap();

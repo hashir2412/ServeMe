@@ -62,6 +62,8 @@ export class PlaceOrderComponent implements OnInit {
       console.log(res);
     });
   }
+
+  
 }
 
 

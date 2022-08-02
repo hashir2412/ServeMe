@@ -23,6 +23,19 @@ namespace ServeMe.Repository
             _mapper = mapper;
         }
 
+        public async Task<ResponseBaseModel<int>> AddReview(ReviewsRatingsRequestModel value)
+        {
+            using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
+            {
+                var reviewRatingDbModel = _mapper.Map<ReviewsRatingsDbModel>(value);
+                reviewRatingDbModel.Date = System.DateTime.Now;
+                var sql = "INSERT INTO ReviewsRatings (ServiceID, CartID,UserID,Comment,Stars, Date) VALUES(@ServiceID, @CartID,@UserID,@Comment,@Stars, @Date);SELECT CAST(SCOPE_IDENTITY() as int)";
+                var idOfNewRow = await connection.QueryFirstOrDefaultAsync<int>(sql, reviewRatingDbModel);
+                return idOfNewRow > 0 ? new ResponseBaseModel<int>() { Body = idOfNewRow, Message = "Successfully Added Review", StatusCode = 0 } :
+                    new ResponseBaseModel<int>() { Body = -1, Message = "Failed to add review", StatusCode = 1 };
+            }
+        }
+
         public async Task<ResponseBaseModel<UserDto>> GetUserDetails(int id)
         {
             using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
@@ -61,8 +74,8 @@ namespace ServeMe.Repository
         {
             using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
             {
-                var userDto = new UserDto { Name = user.Name, Phone = user.Phone, Email = user.Email, ReceiveCommunication = user.ReceiveCommunication, Point = user.Point };
-                var userDbModel = _mapper.Map<UserDbModel>(userDto);
+                //var userDto = new UserDto { Name = user.Name, Phone = user.Phone, Email = user.Email, ReceiveCommunication = user.ReceiveCommunication, Point = user.Point };
+                var userDbModel = _mapper.Map<UserDbModel>(user);
                 var sql = "INSERT INTO Users (UserName, Phone,Email,ReceiveCommunication,Point) VALUES(@UserName, @Phone,@Email,@ReceiveCommunication,@Point);SELECT CAST(SCOPE_IDENTITY() as int)";
                 var idOfNewRow = await connection.QueryFirstOrDefaultAsync<int>(sql, userDbModel);
                 return idOfNewRow > 0 ? new ResponseBaseModel<int>() { Body = idOfNewRow, Message = "Successfully Registered", StatusCode = 0 } :

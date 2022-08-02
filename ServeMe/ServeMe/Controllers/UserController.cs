@@ -82,5 +82,11 @@ namespace ServeMe.Controllers
         public void Delete(int id)
         {
         }
+
+        [HttpPost("review")]
+        public async Task<ResponseBaseModel<int>> Post(ReviewsRatingsRequestModel value)
+        {
+            return await _userDomain.AddReview(value);
+        }
     }
 }
