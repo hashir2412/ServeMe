@@ -22,6 +22,7 @@ export class PlaceOrderComponent implements OnInit {
   secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
   isEditable = false;
+  showCart = false;
   paymentType = 'cash';
   model: PlaceOrderRequestModel = new PlaceOrderRequestModel();
   constructor(private store: AppMemoryStoreService, private _formBuilder: FormBuilder, private http: HttpClient) { }
@@ -62,10 +63,7 @@ export class PlaceOrderComponent implements OnInit {
       console.log(res);
     });
   }
-
-  
 }
-
 
 class PlaceOrderRequestModel {
   items: ItemModel[];
