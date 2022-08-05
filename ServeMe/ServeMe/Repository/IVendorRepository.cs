@@ -9,6 +9,7 @@ namespace ServeMe.Repository
         Task<ResponseBaseModel<VendorDto>> GetVendorDetails(int id);
         Task<ResponseBaseModel<VendorDto>> GetVendorDetails(string email);
         Task<ResponseBaseModel<VendorDto>> Login(string email, string password);
+        Task<ResponseBaseModel<VendorDashboardDto>> GetVendorDashboardDetails(int id);
 
     }
 }

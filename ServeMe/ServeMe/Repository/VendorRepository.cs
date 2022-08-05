@@ -23,6 +23,24 @@ namespace ServeMe.Repository
             _mapper = mapper;
         }
 
+        public async Task<ResponseBaseModel<VendorDashboardDto>> GetVendorDashboardDetails(int id)
+        {
+            using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
+            {
+                var parameters = new { UserID = id };
+                var sql = "select Sum(0.8*Rate*Quantity) as 'Total',Cart.Date as 'Date' from Cart inner join Service on Cart.ServiceId=Service.ServiceId where VendorID = @UserID and Cart.StatusID = 2 group by Cart.Date";
+                var result = await connection.QueryFirstOrDefaultAsync<Orders>(sql, parameters);
+                //var userDto = _mapper.Map<VendorDto>(result);
+                return new ResponseBaseModel<VendorDashboardDto>() { Body = null, Message = "Vendor not found", StatusCode = 1 };
+                //: new ResponseBaseModel<VendorDashboardDto>()
+                //{
+                //    Body = userDto,
+                //    Message = "Success",
+                //    StatusCode = 0
+                //};
+            }
+        }
+
         public async Task<ResponseBaseModel<VendorDto>> GetVendorDetails(int id)
         {
             using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
@@ -44,7 +62,7 @@ namespace ServeMe.Repository
         {
             using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
             {
-                var parameters = new { Email = email};
+                var parameters = new { Email = email };
                 var sql = "select * from Vendors where email = @Email";
                 var result = await connection.QueryFirstOrDefaultAsync<VendorDbModel>(sql, parameters);
                 var userDto = _mapper.Map<VendorDto>(result);
@@ -61,7 +79,7 @@ namespace ServeMe.Repository
         {
             using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
             {
-                var parameters = new { Email = email,Password = password };
+                var parameters = new { Email = email, Password = password };
                 var sql = "select * from Creds where Email = @Email and Password=@Password";
                 var result = await connection.QueryFirstOrDefaultAsync<VendorDbModel>(sql, parameters);
                 var userDto = _mapper.Map<VendorDto>(result);

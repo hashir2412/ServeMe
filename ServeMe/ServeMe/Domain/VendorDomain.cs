@@ -14,6 +14,10 @@ namespace ServeMe.Domain
             _credsRepository = credsRepository;
         }
 
+        public async Task<ResponseBaseModel<VendorDashboardDto>> GetVendorDashboardDetails(int id)
+        {
+            return await _vendorRepository.GetVendorDashboardDetails(id);
+        }
 
         public async Task<ResponseBaseModel<VendorDto>> GetVendorDetails(int id)
         {

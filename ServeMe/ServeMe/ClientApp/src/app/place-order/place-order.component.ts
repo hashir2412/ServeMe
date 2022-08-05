@@ -43,17 +43,20 @@ export class PlaceOrderComponent implements OnInit {
     const res: PlaceOrderRequestModel = {
       address: '21', items: [{
         date: new Date(), quantity: 1, rate: 12, service: {
-          name: 'Maths Professor', rate: 12, rateType: 1, serviceCategoryId: 5, serviceID: 1, vendorId: 1
+          name: 'Maths Professor', rate: 12, rateType: 1, serviceCategoryId: 5, serviceID: 1, vendorId: 1,
+          quantity: 2
         }
       },
       {
         date: new Date(2022, 7, 1), quantity: 1, rate: 12, service: {
-          name: 'Maths Professor', rate: 12, rateType: 1, serviceCategoryId: 5, serviceID: 1, vendorId: 1
+          name: 'Maths Professor', rate: 12, rateType: 1, serviceCategoryId: 5, serviceID: 1, vendorId: 1,
+          quantity: 2
         }
       },
       {
         date: new Date(2022, 7, 2), quantity: 1, rate: 12, service: {
-          name: 'Maths Professor', rate: 12, rateType: 1, serviceCategoryId: 5, serviceID: 1, vendorId: 1
+          name: 'Maths Professor', rate: 12, rateType: 1, serviceCategoryId: 5, serviceID: 1, vendorId: 1,
+          quantity: 2
         }
       }], paymentType: 'cash', total: 12, email: 'z@z.com', userId: 0
     }
@@ -63,7 +66,7 @@ export class PlaceOrderComponent implements OnInit {
     });
   }
 
-  
+
 }
 
 

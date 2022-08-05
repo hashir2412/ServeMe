@@ -1,2 +1,131 @@
-<p>orders works!</p>
-<button mat-raised-button type="submit" color="primary" (click)="onPlaceReview()">Review</button>
+<app-loading [show$]="loading$"></app-loading>
+<app-message [messages$]="messages$"></app-message>
+
+<div fxLayout="column" fxLayoutGap="10px">
+    <div fxLayout="column" fxLayoutGap="10px">
+        <mat-accordion class="example-headers-align" multi>
+            <mat-expansion-panel expanded="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Current Orders
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div fxLayout="column" fxLayoutGap="10px">
+                    <h5 *ngIf="(currentOrders$ | async).length === 0">No Current Orders found</h5>
+                    <mat-accordion *ngFor="let order of currentOrders$ | async" class="example-headers-align" multi>
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    {{order.address}}
+                                    Total Items: {{order.items.length}}
+                                </mat-panel-title>
+                                <mat-panel-description>
+                                    {{order.total | currency}}
+                                    {{order.date | date:'mediumDate'}}
+                                </mat-panel-description>
+                            </mat-expansion-panel-header>
+                            <div fxLayout="column" fxLayoutGap="10px">
+                                <div *ngFor="let item of order.items;index as i" fxLayout="row"
+                                    fxLayoutAlign="space-between none">
+                                    <h4>{{i+1}}. {{item.name}}</h4>
+                                    <h4>{{item.date | date:'medium'}}</h4>
+                                    <h4>Cost: {{item.rate | currency}}</h4>
+                                    <h4>Quantity: {{item.quantity}}</h4>
+                                    <div fxLayout="row" fxLayoutGap="5px">
+                                        <button mat-raised-button type="submit" color="primary"
+                                            (click)="onCancel(item)">Cancel</button>
+                                        <button mat-raised-button type="submit" color="primary"
+                                            (click)="onModify(item)">Modify</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <mat-accordion class="example-headers-align" multi>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Past Orders
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div fxLayout="column" fxLayoutGap="10px">
+                    <h5 *ngIf="(pastOrders$ | async).length === 0">No Past Orders found</h5>
+                    <mat-accordion *ngFor="let order of pastOrders$ | async" class="example-headers-align" multi>
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    {{order.address}}
+                                    Total Items: {{order.items.length}}
+                                </mat-panel-title>
+                                <mat-panel-description>
+                                    {{order.total | currency}}
+                                    {{order.date | date:'mediumDate'}}
+                                </mat-panel-description>
+                            </mat-expansion-panel-header>
+                            <div fxLayout="column" fxLayoutGap="10px">
+                                <div *ngFor="let item of order.items;index as i" fxLayout="row"
+                                    fxLayoutAlign="space-between none">
+                                    <h4>{{i+1}}. {{item.service.name}}</h4>
+                                    <h4>{{item.date | date:'medium'}}</h4>
+                                    <h4>Cost: {{item.rate | currency}}</h4>
+                                    <h4>Quantity: {{item.quantity}}</h4>
+                                    <div fxLayout="row" fxLayoutGap="5px">
+                                        <button mat-raised-button type="submit" color="primary"
+                                            (click)="onCancel(item)">Cancel</button>
+                                        <button mat-raised-button type="submit" color="primary"
+                                            (click)="onModify(item)">Modify</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+
+            </mat-expansion-panel>
+        </mat-accordion>
+        <mat-accordion class="example-headers-align" multi>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Cancelled Orders
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div fxLayout="column" fxLayoutGap="10px">
+                    <h5 *ngIf="(cancelledOrders$ | async).length === 0">No Cancelled Orders found</h5>
+                    <mat-accordion *ngFor="let order of cancelledOrders$ | async" class="example-headers-align" multi>
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    {{order.address}}
+                                    Total Items: {{order.items.length}}
+                                </mat-panel-title>
+                                <mat-panel-description>
+                                    {{order.total | currency}}
+                                    {{order.date | date:'mediumDate'}}
+                                </mat-panel-description>
+                            </mat-expansion-panel-header>
+                            <div fxLayout="column" fxLayoutGap="10px">
+                                <div *ngFor="let item of order.items;index as i" fxLayout="row"
+                                    fxLayoutAlign="space-between none">
+                                    <h4>{{i+1}}. {{item.service.name}}</h4>
+                                    <h4>{{item.date | date:'medium'}}</h4>
+                                    <h4>Cost: {{item.rate | currency}}</h4>
+                                    <h4>Quantity: {{item.quantity}}</h4>
+                                    <div fxLayout="row" fxLayoutGap="5px">
+                                        <button mat-raised-button type="submit" color="primary"
+                                            (click)="onCancel(item)">Cancel</button>
+                                        <button mat-raised-button type="submit" color="primary"
+                                            (click)="onModify(item)">Modify</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</div>

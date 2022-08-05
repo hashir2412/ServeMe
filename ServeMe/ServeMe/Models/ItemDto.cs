@@ -13,7 +13,7 @@ namespace ServeMe.Models
 
         public DateTime Date { get; set; }
 
-        public int StatusID { get; set; }
+        public int StatusId { get; set; }
 
         public ServiceDto Service { get; set; }
     }

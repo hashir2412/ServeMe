@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { IDataStore, MemoryStore } from '@svaza/datastore';
+import { MessageService } from 'primeng/api';
 import { AppMemoryStoreService } from './common/app-memory-store';
 import { Keys } from './constants/keys.enum';
 import { UserModel } from './registration-login/registration-login.model';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
+  providers: [MessageService]
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   /**
    *
    */
@@ -17,7 +19,7 @@ export class AppComponent implements OnInit{
   }
   ngOnInit(): void {
     const user = localStorage.getItem(Keys.User);
-    if(user != null){
+    if (user != null) {
       this.store.add<UserModel>(Keys.User, <UserModel>JSON.parse(user));
       this.store.notify(Keys.User);
     }
@@ -25,5 +27,5 @@ export class AppComponent implements OnInit{
   }
   title = 'app';
 
-  
+
 }

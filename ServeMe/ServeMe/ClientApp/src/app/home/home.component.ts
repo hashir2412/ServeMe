@@ -29,7 +29,9 @@ export class HomeComponent implements OnInit {
     this.http.get<BaseResponseModel<ServiceModel[]>>(ApiUrl.Service).subscribe(res => {
       this.loading$.next(false);
       if (res.statusCode === 0) {
-        this.services$.next(res.body);
+        const servies:ServiceModel[] = res.body;
+        servies.forEach(ser => ser.quantity = 0);
+        this.services$.next(servies);
       }
     }, err => {
       this.loading$.next(false);
@@ -37,8 +39,9 @@ export class HomeComponent implements OnInit {
   }
 
   onAddToCart(service: ServiceModel) {
+    service.quantity = 1;
     this.cart.push({ service: service, date: new Date(new Date().setDate(new Date().getDate() + 1)), quantity: 1, rate: service.rate });
-    this.store.add(Keys.Cart,this.cart);
+    this.store.add(Keys.Cart, this.cart);
   }
 
   // Declare this key and iv values in declaration

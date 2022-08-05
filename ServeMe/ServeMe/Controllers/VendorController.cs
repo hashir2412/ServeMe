@@ -26,9 +26,16 @@ namespace ServeMe.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ResponseBaseModel<VendorDto>> GetUserDetails(int id)
+        public async Task<ResponseBaseModel<VendorDto>> GetVendorDetails(int id)
         {
             return await _vendorDomain.GetVendorDetails(id);
+        }
+
+
+        [HttpGet("dashboard")]
+        public async Task<ResponseBaseModel<VendorDashboardDto>> GetVendorDashboardDetails(int id)
+        {
+            return await _vendorDomain.GetVendorDashboardDetails(id);
         }
 
         // POST api/<UserController>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ServeMe.Domain;
 using ServeMe.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -71,10 +72,34 @@ namespace ServeMe.Controllers
 
         }
 
-        // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost("cancelorder")]
+        public async Task<ResponseBaseModel<int>> CancelOrder(int cartId)
         {
+            if (ModelState.IsValid)
+            {
+                return await _orderDomain.CancelCart(cartId);
+            }
+            else
+            {
+                return new ResponseBaseModel<int>() { Body = -1, Message = "Error", StatusCode = 1 };
+            }
+
+        }
+
+
+
+        // PUT api/<UserController>/5
+        [HttpPost("modifyorder")]
+        public async Task<ResponseBaseModel<int>> ModifyOrder(ModifyOrderRequestModel modifyOrderRequestModel)
+        {
+            if (ModelState.IsValid)
+            {
+                return await _orderDomain.ModifyCart(modifyOrderRequestModel.CartId, modifyOrderRequestModel.DateTime);
+            }
+            else
+            {
+                return new ResponseBaseModel<int>() { Body = -1, Message = "Error", StatusCode = 1 };
+            }
         }
 
         // DELETE api/<UserController>/5

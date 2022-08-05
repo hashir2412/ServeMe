@@ -8,5 +8,8 @@ namespace ServeMe.Domain
         Task<ResponseBaseModel<VendorDto>> GetVendorDetails(int id);
 
         Task<ResponseBaseModel<int>> Register(VendorDto vendor, string password);
+
+        Task<ResponseBaseModel<VendorDashboardDto>> GetVendorDashboardDetails(int id);
+
     }
 }

@@ -39,6 +39,17 @@ import { PlaceOrderComponent } from './place-order/place-order.component';
 import { LoginComponent } from './registration-login/login/login.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { OrdersComponent } from './orders/orders.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDividerModule } from '@angular/material/divider';
+import { CommonModule } from '@angular/common';
+import { MatListModule } from '@angular/material/list';
+import { ConfirmComponent } from './confirm/confirm.component';
+import { ModifyOrderComponent } from './modify-order/modify-order.component';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { ToastModule } from 'primeng/toast';
 
 
 @NgModule({
@@ -56,7 +67,9 @@ import { OrdersComponent } from './orders/orders.component';
     CustomerProfileComponent,
     VendorProfileComponent,
     PlaceOrderComponent,
-    OrdersComponent
+    OrdersComponent,
+    ConfirmComponent,
+    ModifyOrderComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -89,7 +102,16 @@ import { OrdersComponent } from './orders/orders.component';
     TableModule,
     MatCardModule,
     MatStepperModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatExpansionModule,
+    MatDividerModule,
+    CommonModule,
+    MatListModule,
+    MatButtonToggleModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSelectModule,
+    ToastModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true }, AppMemoryStoreService],
   bootstrap: [AppComponent]

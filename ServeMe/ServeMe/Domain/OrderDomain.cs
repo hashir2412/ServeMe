@@ -22,9 +22,20 @@ namespace ServeMe.Domain
             _appSettings = appSettings.Value;
             _userRepository = userRepository1;
         }
+
+        public Task<ResponseBaseModel<int>> CancelCart(int cartId)
+        {
+            return _orderRepository.CancelOrder(cartId);
+        }
+
         public async Task<ResponseBaseModel<IEnumerable<OrderDto>>> GetOrdersByUser(int id)
         {
             return await _orderRepository.GetOrdersByUser(id);
+        }
+
+        public async Task<ResponseBaseModel<int>> ModifyCart(int cartId, DateTime dateTime)
+        {
+            return await _orderRepository.ModifyCart(cartId, dateTime);
         }
 
         public async Task<ResponseBaseModel<int>> PlaceOrder(OrderRequestModel order)

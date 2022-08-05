@@ -5,6 +5,7 @@ export class ServiceModel {
     name: string;
     vendorId: number;
     serviceCategoryId: number;
+    quantity: number;
 }
 
 export class ItemModel {

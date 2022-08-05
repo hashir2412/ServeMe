@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ServeMe.Models;
 using ServeMe.Repository.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -87,6 +88,32 @@ namespace ServeMe.Repository
             var rowsAffected = await connection.QueryFirstOrDefaultAsync<int>(sql, cart, transaction);
             return rowsAffected > 0 ? new ResponseBaseModel<int>() { Body = rowsAffected, Message = "Successfully Added to cart", StatusCode = 0 } :
                 new ResponseBaseModel<int>() { Body = -1, Message = "Failed to add cart", StatusCode = 1 };
+        }
+
+        public async Task<ResponseBaseModel<int>> CancelOrder(int cartId)
+        {
+            using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
+            {
+                var parameters = new { cartId = cartId };
+
+                //var userDto = new UserDto { Name = user.Name, Phone = user.Phone, Email = user.Email, ReceiveCommunication = user.ReceiveCommunication, Point = user.Point };
+                var sql = "Update Cart SET StatusID = 3 where CartID = @cartId";
+                var idOfNewRow = await connection.QueryFirstOrDefaultAsync<int>(sql, parameters);
+                return idOfNewRow == 1 ? new ResponseBaseModel<int>() { Body = idOfNewRow, Message = "Successfully Cancelled the order", StatusCode = 0 } :
+                    new ResponseBaseModel<int>() { Body = -1, Message = "Failed to cancel the order", StatusCode = 1 };
+            }
+        }
+
+        public async Task<ResponseBaseModel<int>> ModifyCart(int cartId, DateTime dateTime)
+        {
+            using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
+            {
+                var parameters = new { cartId = cartId,dateTime = dateTime.ToString("yyyy-MM-ddTHH:mm:ss") };
+                var sql = "Update Cart SET Date = @dateTime where CartID = @cartId";
+                var idOfNewRow = await connection.QueryFirstOrDefaultAsync<int>(sql, parameters);
+                return idOfNewRow == 1 ? new ResponseBaseModel<int>() { Body = idOfNewRow, Message = "Successfully Modified the order", StatusCode = 0 } :
+                    new ResponseBaseModel<int>() { Body = -1, Message = "Failed to modify the order", StatusCode = 1 };
+            }
         }
     }
 }
