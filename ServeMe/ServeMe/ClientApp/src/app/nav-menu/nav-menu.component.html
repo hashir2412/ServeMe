@@ -1,4 +1,4 @@
-<header>
+<!-- <header>
   <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container">
       <a class="navbar-brand" [routerLink]="['/']">ServeMe</a>
@@ -30,4 +30,24 @@
       </div>
     </div>
   </nav>
-</header>
+</header> -->
+<mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="space-between none" style="height: 40px; cursor: pointer;">
+  <span style="margin-top: 4px; font-weight: 400;">ServeMe</span>
+  <div fxLayout="row" fxLayoutAlign="space-between none">
+    <span [routerLink]="['/']" style="margin-top: 4px; margin-right: 10px; font-weight: 400;">Home</span>
+    <span [routerLink]="['/cart']" style="margin-top: 4px; margin-right: 10px; font-weight: 400;">View Cart</span>
+    <button [matMenuTriggerFor]="menu" mat-icon-button class="example-icon"
+      aria-label="Example icon-button with share icon">
+      <mat-icon>person</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <ng-container *ngIf="(user$ | async) != null">
+        <button mat-menu-item [routerLink]="['/profile']">View Profile</button>
+        <button mat-menu-item [routerLink]="['/orders']">Orders</button>
+        <button mat-menu-item (click)="onLogOut()">Log out</button>
+      </ng-container>
+      <button (click)="openDialog()" mat-menu-item *ngIf="(user$ | async) == null">Register/Login</button>
+    </mat-menu>
+  </div>
+
+</mat-toolbar>

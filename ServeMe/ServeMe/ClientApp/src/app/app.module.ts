@@ -50,7 +50,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { ToastModule } from 'primeng/toast';
-
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [
@@ -111,7 +111,8 @@ import { ToastModule } from 'primeng/toast';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    ToastModule
+    ToastModule,
+    MatToolbarModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true }, AppMemoryStoreService],
   bootstrap: [AppComponent]
