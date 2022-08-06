@@ -6,6 +6,18 @@
         aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
         <span class="navbar-toggler-icon"></span>
       </button>
+      <div fxLayoutAlign="center center">
+        <button mat-button [matMenuTriggerFor]="menu">Search</button>
+      </div>
+      <mat-form-field>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput type="search" placeholder="search here" class="search-input">
+      </mat-form-field>
+      <!-- <mat-menu #menu="matMenu">
+        <button mat-menu-item>By Ratings</button>
+        <button mat-menu-item>By Service</button>
+        <button mat-menu-item>By Vendor</button>
+      </mat-menu> -->
       <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]="{ show: isExpanded }">
         <ul class="navbar-nav flex-grow">
           <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">
