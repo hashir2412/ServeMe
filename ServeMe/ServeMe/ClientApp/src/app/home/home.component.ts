@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import * as CryptoJS from 'crypto-js';
-import { Message } from 'primeng/api';
+import { Message, MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { AppMemoryStoreService } from '../common/app-memory-store';
 import { BaseResponseModel } from '../common/base-response.model';
-import { ItemModel, ServiceModel } from '../common/service.model';
+import { ItemModel, ServiceCategory, ServiceModel } from '../common/service.model';
 import { ApiUrl } from '../constants/api-url.enum';
 import { Keys } from '../constants/keys.enum';
 
@@ -15,22 +15,38 @@ import { Keys } from '../constants/keys.enum';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent implements OnInit {
-  cart: ItemModel[] = [];
+  searchType: SearchType = SearchType.StarRating;
+  type = SearchType;
+  cart: ServiceCategory[] = [];
   loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   messages$: Subject<Message> = new Subject<Message>();
-  constructor(private http: HttpClient, private store: AppMemoryStoreService) {
+  constructor(private http: HttpClient, private store: AppMemoryStoreService, private service: MessageService) {
   }
-  services$: BehaviorSubject<ServiceModel[]> = new BehaviorSubject<ServiceModel[]>([]);
-  longText = `The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog
-  from Japan. A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was
-  originally bred for hunting.`;
+  services$: BehaviorSubject<ServiceCategory[]> = new BehaviorSubject<ServiceCategory[]>([]);
+
   ngOnInit(): void {
     this.loading$.next(true);
-    this.http.get<BaseResponseModel<ServiceModel[]>>(ApiUrl.Service).subscribe(res => {
+    const cart = this.store.get<ServiceCategory[]>(Keys.Cart);
+    this.http.get<BaseResponseModel<ServiceCategory[]>>(ApiUrl.Service).subscribe(res => {
       this.loading$.next(false);
       if (res.statusCode === 0) {
-        const servies:ServiceModel[] = res.body;
-        servies.forEach(ser => ser.quantity = 0);
+        const servies: ServiceCategory[] = res.body;
+        let cartDuplicate: ServiceCategory[] = [];
+        servies.forEach(ser => {
+          if (cart) {
+            const item = cart.find(crt => crt.serviceCategoryId === ser.serviceCategoryId);
+            if (item) {
+              cartDuplicate.push(item);
+              ser.quantity = item.quantity;
+            } else {
+              ser.quantity = 0;
+            }
+          } else {
+            ser.quantity = 0;
+          }
+        });
+        this.cart = cartDuplicate;
+        this.store.add(Keys.Cart, this.cart);
         this.services$.next(servies);
       }
     }, err => {
@@ -38,10 +54,22 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  onAddToCart(service: ServiceModel) {
+  onAddToCart(service: ServiceCategory) {
     service.quantity = 1;
-    this.cart.push({ service: service, date: new Date(new Date().setDate(new Date().getDate() + 1)), quantity: 1, rate: service.rate });
+    service.date = new Date();
+    this.cart.push(service);
     this.store.add(Keys.Cart, this.cart);
+  }
+
+  decreaseQuantity(service: ServiceCategory) {
+    service.quantity--;
+    if (service.quantity === 0) {
+      const index = this.cart.findIndex(item => item.serviceCategoryId === service.serviceCategoryId);
+      if (index > -1) {
+        this.cart.splice(index, 1);
+        this.store.add(Keys.Cart, this.cart);
+      }
+    }
   }
 
   // Declare this key and iv values in declaration
@@ -72,4 +100,9 @@ export class HomeComponent implements OnInit {
   //   });
   //   console.log('Encrypted :' + encrypted);
   // }
+}
+export enum SearchType {
+  StarRating = 1,
+  Address = 2,
+  Name = 3
 }

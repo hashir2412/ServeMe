@@ -10,7 +10,7 @@ namespace ServeMe.Domain
 
         Task<ResponseBaseModel<int>> Update(ServiceDto service);
 
-        Task<ResponseBaseModel<IEnumerable<ServiceDto>>> GetServices();
+        Task<ResponseBaseModel<IEnumerable<ServiceCategoryDto>>> GetServices();
 
         Task<ResponseBaseModel<IEnumerable<ServiceDto>>> GetServicesByVendor(int id);
     }

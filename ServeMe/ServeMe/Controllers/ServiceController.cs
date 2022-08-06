@@ -20,7 +20,7 @@ namespace ServeMe.Controllers
         }
         // GET: api/<ServiceController>
         [HttpGet]
-        public async Task<ResponseBaseModel<IEnumerable<ServiceDto>>> Get()
+        public async Task<ResponseBaseModel<IEnumerable<ServiceCategoryDto>>> Get()
         {
             return await _serviceDomain.GetServices();
         }

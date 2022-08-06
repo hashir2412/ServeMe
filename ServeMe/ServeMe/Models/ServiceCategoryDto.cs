@@ -2,12 +2,15 @@
 
 namespace ServeMe.Models
 {
-    public class ItemRequestModel
+    public class ServiceCategoryDto
     {
-        public ServiceCategoryDto ServiceCategory { get; set; }
+        public int ServiceCategoryId { get; set; }
+
+        public string Name { get; set; }
 
         public int Quantity { get; set; }
 
         public DateTime Date { get; set; }
+
     }
 }

@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Message } from 'primeng/api';
+import { Message, MessageService } from 'primeng/api';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { AppMemoryStoreService } from '../common/app-memory-store';
-import { ItemModel } from '../common/service.model';
+import { BaseResponseModel } from '../common/base-response.model';
+import { ItemModel, ServiceCategory } from '../common/service.model';
 import { ApiUrl } from '../constants/api-url.enum';
 import { Keys } from '../constants/keys.enum';
+import { UserModel } from '../registration-login/registration-login.model';
 
 @Component({
   selector: 'app-place-order',
@@ -17,19 +19,33 @@ import { Keys } from '../constants/keys.enum';
 export class PlaceOrderComponent implements OnInit {
   loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   messages$: Subject<Message> = new Subject<Message>();
-  items$: Observable<ItemModel[]> = new Observable<ItemModel[]>();
+  items$: Observable<ServiceCategory[]> = new Observable<ServiceCategory[]>();
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
+  showAddress = false;
   isEditable = false;
   paymentType = 'cash';
+  cart: ServiceCategory[] = [];
   model: PlaceOrderRequestModel = new PlaceOrderRequestModel();
-  constructor(private store: AppMemoryStoreService, private _formBuilder: FormBuilder, private http: HttpClient) { }
+  tomorrowDate: Date = new Date((new Date()).getDate() + 1);
+  constructor(private store: AppMemoryStoreService, private _formBuilder: FormBuilder, private http: HttpClient, private service: MessageService) { }
 
   ngOnInit(): void {
-    this.items$ = this.store.observe<ItemModel[]>(Keys.Cart);
+    const items = this.store.observe<ServiceCategory[]>(Keys.Cart);
+    if (items) {
+      this.items$ = items;
+    }
+    this.cart = this.store.get(Keys.Cart);
     this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required],
+      name: ['', Validators.required],
+      address_line1: ['', Validators.required],
+      address_line2: [''],
+      city: ['', Validators.required],
+      state: ['', Validators.required],
+      pincode: ['', Validators.required],
+      email_address: ['', Validators.required],
+      phone: ['', Validators.required],
     });
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required],
@@ -40,30 +56,40 @@ export class PlaceOrderComponent implements OnInit {
   }
   onPlaceOrder() {
     this.loading$.next(true);
-    const res: PlaceOrderRequestModel = {
-      address: '21', items: [{
-        date: new Date(), quantity: 1, rate: 12, service: {
-          name: 'Maths Professor', rate: 12, rateType: 1, serviceCategoryId: 5, serviceID: 1, vendorId: 1,
-          quantity: 2
-        }
-      },
-      {
-        date: new Date(2022, 7, 1), quantity: 1, rate: 12, service: {
-          name: 'Maths Professor', rate: 12, rateType: 1, serviceCategoryId: 5, serviceID: 1, vendorId: 1,
-          quantity: 2
-        }
-      },
-      {
-        date: new Date(2022, 7, 2), quantity: 1, rate: 12, service: {
-          name: 'Maths Professor', rate: 12, rateType: 1, serviceCategoryId: 5, serviceID: 1, vendorId: 1,
-          quantity: 2
-        }
-      }], paymentType: 'cash', total: 12, email: 'z@z.com', userId: 0
+    this.model.items = this.cart;
+    const user = this.store.get<UserModel>(Keys.User);
+    if (user) {
+      this.model.userId = user.userID;
     }
-    this.http.post(ApiUrl.Order, res).subscribe(res => {
+    this.http.post<BaseResponseModel<number>>(ApiUrl.Order, this.model).subscribe(res => {
       this.loading$.next(false);
-      console.log(res);
+      if (res.statusCode === 0) {
+        this.cart = [];
+        this.store.add(Keys.Cart, this.cart);
+        this.service.add({ severity: 'success', detail: 'Successfully Placed Service Request' });
+      } else {
+        this.service.add({ severity: 'warn', detail: res.message });
+      }
+
     });
+  }
+
+  onAddToCart(service: ServiceCategory) {
+    service.quantity = 1;
+    service.date = new Date();
+    this.cart.push(service);
+    this.store.add(Keys.Cart, this.cart);
+  }
+
+  decreaseQuantity(service: ServiceCategory) {
+    service.quantity--;
+    if (service.quantity === 0) {
+      const index = this.cart.findIndex(item => item.serviceCategoryId === service.serviceCategoryId);
+      if (index > -1) {
+        this.cart.splice(index, 1);
+        this.store.add(Keys.Cart, this.cart);
+      }
+    }
   }
 
 
@@ -71,11 +97,14 @@ export class PlaceOrderComponent implements OnInit {
 
 
 class PlaceOrderRequestModel {
-  items: ItemModel[];
-  paymentType: string;
-  total: number;
-  address: string;
-  userId: number;
-  name?: string;
+  items: ServiceCategory[];
+  userId?: number;
+  name: string;
   email: string;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  state: string;
+  pincode: string;
+  phone: string;
 }

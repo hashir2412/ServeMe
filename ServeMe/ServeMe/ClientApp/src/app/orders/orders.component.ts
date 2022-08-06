@@ -5,7 +5,7 @@ import { Message, MessageService } from 'primeng/api';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { AppMemoryStoreService } from '../common/app-memory-store';
 import { BaseResponseModel } from '../common/base-response.model';
-import { ServiceModel } from '../common/service.model';
+import { ServiceCategory } from '../common/service.model';
 import { ConfirmComponent } from '../confirm/confirm.component';
 import { ApiUrl } from '../constants/api-url.enum';
 import { Keys } from '../constants/keys.enum';
@@ -104,7 +104,13 @@ class ReviewRequestModel {
 
 class OrderResponseModel {
   id: number;
-  address: string;
+  name: string;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  state: string;
+  pincode: string;
+  phone: string;
   date: Date;
   total: number;
   items: CartResponseModel[];
@@ -112,10 +118,20 @@ class OrderResponseModel {
 
 class CartResponseModel {
   cartId: number;
+  orderId: number;
   quantity: number;
   name: string;
   rate: number;
   date: Date;
   statusId: number;
-  service: ServiceModel;
+  serviceCategoryId: number;
+  serviceCategory: ServiceCategory;
+  bids: BidResponseModel;
+}
+
+class BidResponseModel {
+  bidId: number;
+  cartId: number;
+  vendorId: number;
+  amount: number;
 }

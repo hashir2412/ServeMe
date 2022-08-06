@@ -42,24 +42,24 @@ namespace ServeMe.Domain
         {
             using (var conn = new SqlConnection(_appSettings.DatabaseConnection))
             {
-                if (order.UserID == 0)
+                if (order.UserId == 0)
                 {
                     var userExist = await _userRepository.GetUserDetails(order.Email);
                     if (userExist.StatusCode != 0 && userExist.Message == "User not found")
                     {
-                        var user = await _userRepository.Register(new UserDto() { Email = order.Email });
+                        var user = await _userRepository.Register(new UserDto() { Email = order.Email,Phone = order.Phone });
                         if (user.StatusCode != 0)
                         {
                             return new ResponseBaseModel<int>() { Body = 1, Message = "Error placing order", StatusCode = 1 };
                         }
                         else
                         {
-                            order.UserID = user.Body;
+                            order.UserId = user.Body;
                         }
                     }
                     else
                     {
-                        order.UserID = userExist.Body.UserId;
+                        order.UserId = userExist.Body.UserId;
                     }
                 }
                 conn.Open();
@@ -69,50 +69,60 @@ namespace ServeMe.Domain
                 {
                     try
                     {
-                        
+
                         var result = await _orderRepository.PlaceOrder(new Repository.Models.OrderDbModel()
                         {
-                            Address = order.Address,
+                            Name = order.Name,
+                            AddressLine1 = order.AddressLine1,
+                            AddressLine2 = order.AddressLine2,
+                            City = order.City,
+                            State = order.State,
+                            Phone = order.Phone,
+                            Pincode = order.Pincode,
                             Date = System.DateTime.Now,
-                            UserID = order.UserID,
+                            UserID = order.UserId,
                             StatusID = 1,
                             Total = order.Total
                         }, conn, tran);
                         if (result.StatusCode == 0)
                         {
                             List<Task> tasks = new List<Task>();
-                            foreach(var cart in order.Items)
+                            foreach (var cart in order.Items)
                             {
                                 tasks.Add(_orderRepository.AddToCart(new Repository.Models.CartDbModel()
                                 {
                                     Date = cart.Date,
                                     OrderID = result.Body,
                                     Quantity = cart.Quantity,
-                                    Rate = cart.Rate,
                                     StatusID = 1,
-                                    ServiceID = cart.Service.ServiceID,
-                                },conn, tran));
+                                    ServiceCategoryID = cart.ServiceCategoryId,
+                                }, conn, tran));
                             }
                             await Task.WhenAll(tasks);
-                            var res = await _paymentRepository.AddPayment(new Repository.Models.PaymentDbModel()
-                            {
-                                UserID = order.UserID,
-                                PaymentType = order.PaymentType,
-                                OrderID = result.Body,
-                                CommissionDeducted = 0.2 * order.Total,
-                                TotalAmount = order.Total,
-                                Date = System.DateTime.Now
-                            }, conn, tran);
-                            if (res.StatusCode == 0)
-                            {
-                                tran.Commit();
-                                return new ResponseBaseModel<int>() { Body = 1, Message = "Successfully added Order", StatusCode = 0 };
-                            }
-                            else
-                            {
-                                tran.Rollback();
-                                return new ResponseBaseModel<int>() { Body = 1, Message = "Error placing order", StatusCode = 1 };
-                            }
+                            //var res = await _paymentRepository.AddPayment(new Repository.Models.PaymentDbModel()
+                            //{
+                            //    UserID = order.UserId,
+                            //    PaymentType = order.PaymentType,
+                            //    OrderID = result.Body,
+                            //    CommissionDeducted = 0.2 * order.Total,
+                            //    TotalAmount = order.Total,
+                            //    Date = System.DateTime.Now
+                            //}, conn, tran);
+                            //if (res.StatusCode == 0)
+                            //{
+                            tran.Commit();
+                            return new ResponseBaseModel<int>() { Body = 1, Message = "Successfully added Order", StatusCode = 0 };
+                            //}
+                            //else
+                            //{
+                            //    tran.Rollback();
+                            //    return new ResponseBaseModel<int>() { Body = 1, Message = "Error placing order", StatusCode = 1 };
+                            //}
+                        }
+                        else
+                        {
+                            tran.Rollback();
+                            return new ResponseBaseModel<int>() { Body = 1, Message = "Error placing order", StatusCode = 1 };
                         }
                         // if it was successful, commit the transaction
 
@@ -123,10 +133,9 @@ namespace ServeMe.Domain
                         tran.Rollback();
 
                         // handle the error however you need to.
-                        return new ResponseBaseModel<int>() { Body = 1, Message = "Error placing order", StatusCode = 1 };
+                        return new ResponseBaseModel<int>() { Body = 1, Message = ex.Message, StatusCode = 1 };
                     }
                 }
-                return new ResponseBaseModel<int>() { Body = 1, Message = "Error placing order", StatusCode = 1 };
 
             }
         }

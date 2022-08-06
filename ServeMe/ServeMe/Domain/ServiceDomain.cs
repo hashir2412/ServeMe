@@ -12,7 +12,7 @@ namespace ServeMe.Domain
         {
             _serviceRepository = userRepository;
         }
-        public async Task<ResponseBaseModel<IEnumerable<ServiceDto>>> GetServices()
+        public async Task<ResponseBaseModel<IEnumerable<ServiceCategoryDto>>> GetServices()
         {
             return await _serviceRepository.GetServices();
         }

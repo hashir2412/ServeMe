@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ServeMe.Repository.Models
 {
@@ -10,7 +11,7 @@ namespace ServeMe.Repository.Models
 
         public int StatusID { get; set; }
 
-        public int ServiceID { get; set; }
+        public int ServiceCategoryID { get; set; }
 
         public double Rate { get; set; }
 
@@ -18,10 +19,14 @@ namespace ServeMe.Repository.Models
 
         public DateTime Date { get; set; }
 
+        public string DateFormat { get; set; }
+
         public OrderDbModel Order { get; set; }
 
         public StatusDbModel Status { get; set; }
 
-        public ServiceDbModel Service { get; set; }
+        public ServiceCategoryDbModel ServiceCategory { get; set; }
+
+        public List<BidDbModel> Bids { get; set; } = new List<BidDbModel>();
     }
 }

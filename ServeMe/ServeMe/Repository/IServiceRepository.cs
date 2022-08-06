@@ -7,7 +7,7 @@ namespace ServeMe.Repository
     public interface IServiceRepository
     {
         Task<ResponseBaseModel<int>> Register(ServiceDto service);
-        Task<ResponseBaseModel<IEnumerable<ServiceDto>>> GetServices();
+        Task<ResponseBaseModel<IEnumerable<ServiceCategoryDto>>> GetServices();
 
         Task<ResponseBaseModel<int>> Update(ServiceDto service);
 

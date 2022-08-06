@@ -6,13 +6,9 @@
 
         public int VendorID { get; set; }
 
-        public int RateType { get; set; }
-
-        public double Rate { get; set; }
-
-        public string Name { get; set; }
-
         public int ServiceCategoryID { get; set; }
+
+        public int Status { get; set; }
 
         public VendorDbModel Vendor { get; set; }
 

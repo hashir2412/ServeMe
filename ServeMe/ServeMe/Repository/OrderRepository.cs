@@ -28,17 +28,25 @@ namespace ServeMe.Repository
         {
             using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
             {
-                var sql = "select * from Cart inner join Orders on Orders.OrderID = Cart.OrderID " +
-                    "inner join Service on Service.ServiceID = Cart.ServiceID where Orders.UserID = @Id";
+                var sql = "select * from Cart inner join Orders on Orders.OrderID = Cart.OrderID inner join ServiceCategory on Cart.ServiceCategoryId = ServiceCategory.ServiceCategoryID " +
+                    "left join Bid on Bid.CartId = Cart.CartId where Orders.UserID = @Id";
                 var parameters = new { Id = id };
 
-                var SalesCartList = await connection.QueryAsync<CartDbModel, OrderDbModel, ServiceDbModel, CartDbModel>(sql,
-                    (cart, order, service) =>
+                var SalesCartList = await connection.QueryAsync<CartDbModel, OrderDbModel, ServiceCategoryDbModel, BidDbModel, CartDbModel>(sql,
+                    (cart, order, servicecategory, bid) =>
                     {
+                        //if (bid != null)
+                        //{
+                        //    cart.Bids.Add(bid);
+                        //}
                         cart.Order = order;
-                        cart.Service = service;
+                        cart.ServiceCategory = servicecategory;
+                        if (bid != null)
+                        {
+                            cart.Bids.Add(bid);
+                        }
                         return cart;
-                    }, parameters, splitOn: "OrderID,ServiceID"
+                    }, parameters, splitOn: "OrderID,ServiceCategoryID,BidId"
                     );
                 List<OrderDto> result = new List<OrderDto>();
                 var salesCartGroupedList = SalesCartList.GroupBy(u => u.Order.OrderID)
@@ -49,14 +57,20 @@ namespace ServeMe.Repository
                     var cart = SalesCartList.FirstOrDefault(res => res.Order.OrderID == i.Id);
                     OrderDto finalCart = new OrderDto();
                     finalCart.Id = i.Id;
-                    finalCart.Items = new List<ItemDto>();
+                    finalCart.Items = new List<CartDto>();
                     i.Items.ForEach(item =>
                     {
-                        finalCart.Items.Add(_mapper.Map<ItemDto>(item));
+                        finalCart.Items.Add(_mapper.Map<CartDto>(item));
                     });
-                    finalCart.Address = cart.Order.Address;
+                    finalCart.AddressLine1 = cart.Order.AddressLine1;
+                    finalCart.AddressLine2 = cart.Order.AddressLine2;
+                    finalCart.State = cart.Order.State;
+                    finalCart.City = cart.Order.City;
+                    finalCart.Pincode = cart.Order.Pincode;
                     finalCart.Date = cart.Order.Date;
                     finalCart.Total = cart.Order.Total;
+                    finalCart.Name = cart.Order.Name;
+                    finalCart.Phone = cart.Order.Phone;
                     result.Add(finalCart);
                 }
                 return new ResponseBaseModel<IEnumerable<OrderDto>>() { Body = result, Message = "Success", StatusCode = 0 };
@@ -76,7 +90,7 @@ namespace ServeMe.Repository
 
         public async Task<ResponseBaseModel<int>> PlaceOrder(OrderDbModel order, SqlConnection connection, SqlTransaction transaction)
         {
-            var sql = "INSERT INTO Orders (UserID,StatusID,Address,Date, Total) VALUES(@UserID, @StatusID,@Address,@Date,@Total);SELECT CAST(SCOPE_IDENTITY() as int)";
+            var sql = "INSERT INTO Orders (Name,UserID,StatusID,AddressLine1,AddressLine2,City,State,Pincode,Date, Total) VALUES(@Name,@UserID, @StatusID,@AddressLine1,@AddressLine2,@City,@State,@Pincode,@Date,@Total);SELECT CAST(SCOPE_IDENTITY() as int)";
             var rowsAffected = await connection.QueryFirstOrDefaultAsync<int>(sql, order, transaction);
             return rowsAffected > 0 ? new ResponseBaseModel<int>() { Body = rowsAffected, Message = "Successfully Added Order", StatusCode = 0 } :
                 new ResponseBaseModel<int>() { Body = -1, Message = "Failed to add order", StatusCode = 1 };
@@ -84,7 +98,8 @@ namespace ServeMe.Repository
 
         public async Task<ResponseBaseModel<int>> AddToCart(CartDbModel cart, SqlConnection connection, SqlTransaction transaction)
         {
-            var sql = "INSERT INTO Cart (OrderID,StatusID,ServiceID,Rate, Quantity, Date) VALUES(@OrderID, @StatusID,@ServiceID,@Rate,@Quantity,@Date);SELECT CAST(SCOPE_IDENTITY() as int)";
+            cart.DateFormat = cart.Date.ToString("yyyy-MM-ddTHH:mm:ss");
+            var sql = "INSERT INTO Cart (OrderID,StatusID,ServiceCategoryId,Rate, Quantity, Date) VALUES(@OrderID, @StatusID,@ServiceCategoryId,@Rate,@Quantity,@DateFormat);SELECT CAST(SCOPE_IDENTITY() as int)";
             var rowsAffected = await connection.QueryFirstOrDefaultAsync<int>(sql, cart, transaction);
             return rowsAffected > 0 ? new ResponseBaseModel<int>() { Body = rowsAffected, Message = "Successfully Added to cart", StatusCode = 0 } :
                 new ResponseBaseModel<int>() { Body = -1, Message = "Failed to add cart", StatusCode = 1 };
@@ -108,7 +123,7 @@ namespace ServeMe.Repository
         {
             using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
             {
-                var parameters = new { cartId = cartId,dateTime = dateTime.ToString("yyyy-MM-ddTHH:mm:ss") };
+                var parameters = new { cartId = cartId, dateTime = dateTime.ToString("yyyy-MM-ddTHH:mm:ss") };
                 var sql = "Update Cart SET Date = @dateTime where CartID = @cartId";
                 var idOfNewRow = await connection.QueryFirstOrDefaultAsync<int>(sql, parameters);
                 return idOfNewRow == 1 ? new ResponseBaseModel<int>() { Body = idOfNewRow, Message = "Successfully Modified the order", StatusCode = 0 } :
