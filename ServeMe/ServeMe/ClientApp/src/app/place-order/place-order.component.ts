@@ -5,7 +5,7 @@ import { Message, MessageService } from 'primeng/api';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { AppMemoryStoreService } from '../common/app-memory-store';
 import { BaseResponseModel } from '../common/base-response.model';
-import { ItemModel, ServiceCategory } from '../common/service.model';
+import { OrderResponseModel, ServiceCategory } from '../common/service.model';
 import { ApiUrl } from '../constants/api-url.enum';
 import { Keys } from '../constants/keys.enum';
 import { UserModel } from '../registration-login/registration-login.model';
@@ -95,16 +95,17 @@ export class PlaceOrderComponent implements OnInit {
 
 }
 
-
 class PlaceOrderRequestModel {
   items: ServiceCategory[];
-  userId?: number;
-  name: string;
-  email: string;
+  total: number;
   addressLine1: string;
   addressLine2: string;
   city: string;
   state: string;
   pincode: string;
   phone: string;
+  name: string;
+  userId: number;
+  email: string;
 }
+

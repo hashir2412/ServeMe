@@ -140,52 +140,52 @@ namespace ServeMe.Repository
         {
             using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
             {
-                var sql = "select * from Cart inner join Service on Cart.ServiceCategoryId = Service.ServiceCategoryID " +
-                    "left join Bid on Bid.CartId = Cart.CartId where Cart.StatusID = 1 and ";
+                var sql = "select * from Cart inner join Service on Cart.ServiceCategoryId = Service.ServiceCategoryID inner join ServiceCategory on ServiceCategory.ServiceCategoryId = Service.ServiceCategoryId left join Bid on Bid.CartId = Cart.CartId where Cart.StatusID = 1 and Service.VendorId= @Id";
                 var parameters = new { Id = id };
 
-                var SalesCartList = await connection.QueryAsync<CartDbModel, OrderDbModel, ServiceCategoryDbModel, BidDbModel, CartDbModel>(sql,
-                    (cart, order, servicecategory, bid) =>
+                var SalesCartList = await connection.QueryAsync<CartDbModel, ServiceCategoryDbModel, BidDbModel, CartDbModel>(sql,
+                    (cart, serviceCategory, bid) =>
                     {
                         //if (bid != null)
                         //{
                         //    cart.Bids.Add(bid);
                         //}
-                        cart.Order = order;
-                        cart.ServiceCategory = servicecategory;
+                        //cart.S = order;
+                        cart.ServiceCategory = serviceCategory;
                         if (bid != null)
                         {
                             cart.Bids.Add(bid);
                         }
                         return cart;
-                    }, parameters, splitOn: "OrderID,ServiceCategoryID,BidId"
+                    }, parameters, splitOn: "ServiceCategoryID,BidId"
                     );
-                List<OrderDto> result = new List<OrderDto>();
-                var salesCartGroupedList = SalesCartList.GroupBy(u => u.Order.OrderID)
-                                      .Select(grp => new { Id = grp.Key, Items = grp.ToList() })
-                                      .ToList();
-                foreach (var i in salesCartGroupedList)
-                {
-                    var cart = SalesCartList.FirstOrDefault(res => res.Order.OrderID == i.Id);
-                    OrderDto finalCart = new OrderDto();
-                    finalCart.Id = i.Id;
-                    finalCart.Items = new List<CartDto>();
-                    i.Items.ForEach(item =>
-                    {
-                        finalCart.Items.Add(_mapper.Map<CartDto>(item));
-                    });
-                    finalCart.AddressLine1 = cart.Order.AddressLine1;
-                    finalCart.AddressLine2 = cart.Order.AddressLine2;
-                    finalCart.State = cart.Order.State;
-                    finalCart.City = cart.Order.City;
-                    finalCart.Pincode = cart.Order.Pincode;
-                    finalCart.Date = cart.Order.Date;
-                    finalCart.Total = cart.Order.Total;
-                    finalCart.Name = cart.Order.Name;
-                    finalCart.Phone = cart.Order.Phone;
-                    result.Add(finalCart);
-                }
-                return new ResponseBaseModel<IEnumerable<CartDto>>() { Body = null, Message = "Success", StatusCode = 0 };
+                //List<OrderDto> result = new List<OrderDto>();
+                //var salesCartGroupedList = SalesCartList.GroupBy(u => u.Order.OrderID)
+                //                      .Select(grp => new { Id = grp.Key, Items = grp.ToList() })
+                //                      .ToList();
+                //foreach (var i in salesCartGroupedList)
+                //{
+                //    var cart = SalesCartList.FirstOrDefault(res => res.Order.OrderID == i.Id);
+                //    OrderDto finalCart = new OrderDto();
+                //    finalCart.Id = i.Id;
+                //    finalCart.Items = new List<CartDto>();
+                //    i.Items.ForEach(item =>
+                //    {
+                //        finalCart.Items.Add(_mapper.Map<CartDto>(item));
+                //    });
+                //    finalCart.AddressLine1 = cart.Order.AddressLine1;
+                //    finalCart.AddressLine2 = cart.Order.AddressLine2;
+                //    finalCart.State = cart.Order.State;
+                //    finalCart.City = cart.Order.City;
+                //    finalCart.Pincode = cart.Order.Pincode;
+                //    finalCart.Date = cart.Order.Date;
+                //    finalCart.Total = cart.Order.Total;
+                //    finalCart.Name = cart.Order.Name;
+                //    finalCart.Phone = cart.Order.Phone;
+                //    result.Add(finalCart);
+                //}
+                var result = _mapper.Map<IEnumerable<CartDto>>(SalesCartList);
+                return new ResponseBaseModel<IEnumerable<CartDto>>() { Body = result, Message = "Success", StatusCode = 0 };
             }
         }
     }
