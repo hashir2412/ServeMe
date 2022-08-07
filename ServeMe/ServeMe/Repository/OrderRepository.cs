@@ -130,5 +130,69 @@ namespace ServeMe.Repository
                     new ResponseBaseModel<int>() { Body = -1, Message = "Failed to modify the order", StatusCode = 1 };
             }
         }
+
+        public async Task<ResponseBaseModel<IEnumerable<OrderDto>>> GetOrdersByVendor(int id)
+        {
+            using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
+            {
+                var sql = "select * from Cart inner join Orders on Orders.OrderID = Cart.OrderID inner join ServiceCategory on Cart.ServiceCategoryId = ServiceCategory.ServiceCategoryID " +
+                    "left join Bid on Bid.CartId = Cart.CartId where Orders.UserID = @Id";
+                var parameters = new { Id = id };
+
+                var SalesCartList = await connection.QueryAsync<CartDbModel, OrderDbModel, ServiceCategoryDbModel, BidDbModel, CartDbModel>(sql,
+                    (cart, order, servicecategory, bid) =>
+                    {
+                        //if (bid != null)
+                        //{
+                        //    cart.Bids.Add(bid);
+                        //}
+                        cart.Order = order;
+                        cart.ServiceCategory = servicecategory;
+                        if (bid != null)
+                        {
+                            cart.Bids.Add(bid);
+                        }
+                        return cart;
+                    }, parameters, splitOn: "OrderID,ServiceCategoryID,BidId"
+                    );
+                List<OrderDto> result = new List<OrderDto>();
+                var salesCartGroupedList = SalesCartList.GroupBy(u => u.Order.OrderID)
+                                      .Select(grp => new { Id = grp.Key, Items = grp.ToList() })
+                                      .ToList();
+                foreach (var i in salesCartGroupedList)
+                {
+                    var cart = SalesCartList.FirstOrDefault(res => res.Order.OrderID == i.Id);
+                    OrderDto finalCart = new OrderDto();
+                    finalCart.Id = i.Id;
+                    finalCart.Items = new List<CartDto>();
+                    i.Items.ForEach(item =>
+                    {
+                        finalCart.Items.Add(_mapper.Map<CartDto>(item));
+                    });
+                    finalCart.AddressLine1 = cart.Order.AddressLine1;
+                    finalCart.AddressLine2 = cart.Order.AddressLine2;
+                    finalCart.State = cart.Order.State;
+                    finalCart.City = cart.Order.City;
+                    finalCart.Pincode = cart.Order.Pincode;
+                    finalCart.Date = cart.Order.Date;
+                    finalCart.Total = cart.Order.Total;
+                    finalCart.Name = cart.Order.Name;
+                    finalCart.Phone = cart.Order.Phone;
+                    result.Add(finalCart);
+                }
+                return new ResponseBaseModel<IEnumerable<OrderDto>>() { Body = result, Message = "Success", StatusCode = 0 };
+
+                //var parameters = new { UserID = id };
+                //var sql = "select * from Orders where UserID = @UserID";
+                //var result = await connection.QueryAsync<UserDbModel>(sql, parameters);
+                //var userDto = _mapper.Map<UserDto>(result);
+                //return result == null ? new ResponseBaseModel<UserDto>() { Body = null, Message = "User not found", StatusCode = 1 } : new ResponseBaseModel<UserDto>()
+                //{
+                //    Body = userDto,
+                //    Message = "Success",
+                //    StatusCode = 0
+                //};
+            }
+        }
     }
 }

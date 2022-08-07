@@ -1,8 +1,7 @@
 export class ServiceModel {
-    serviceId: number;
+    serviceId?: number;
     vendorId: number;
     serviceCategoryId: number;
-    quantity: number;
 }
 
 export class ItemModel {

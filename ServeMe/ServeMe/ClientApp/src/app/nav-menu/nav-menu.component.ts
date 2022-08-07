@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { BehaviorSubject } from 'rxjs';
 import { AppMemoryStoreService } from '../common/app-memory-store';
 import { Keys } from '../constants/keys.enum';
@@ -16,7 +18,7 @@ export class NavMenuComponent implements OnInit {
    *
    */
   user$: BehaviorSubject<UserModel> = new BehaviorSubject<UserModel>(null);
-  constructor(public dialog: MatDialog, private store: AppMemoryStoreService) {
+  constructor(public dialog: MatDialog, private store: AppMemoryStoreService, private service: MessageService, private route: Router) {
 
   }
   ngOnInit(): void {
@@ -50,5 +52,7 @@ export class NavMenuComponent implements OnInit {
   onLogOut() {
     this.store.add(Keys.User, null);
     localStorage.removeItem(Keys.User);
+    this.service.add({ severity: 'success', detail: 'Logout Successful' });
+    this.route.navigateByUrl('/home');
   }
 }

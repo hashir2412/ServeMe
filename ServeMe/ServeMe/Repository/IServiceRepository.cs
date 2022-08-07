@@ -11,6 +11,6 @@ namespace ServeMe.Repository
 
         Task<ResponseBaseModel<int>> Update(ServiceDto service);
 
-        Task<ResponseBaseModel<IEnumerable<ServiceDto>>> GetServicesByVendor(int id);
+        Task<ResponseBaseModel<IEnumerable<ServiceCategoryDto>>> GetServicesByVendor(int id);
     }
 }

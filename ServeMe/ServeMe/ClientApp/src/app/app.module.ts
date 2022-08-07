@@ -51,6 +51,9 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { ToastModule } from 'primeng/toast';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { AddServiceComponent } from './add-service/add-service.component';
+import { BidsComponent } from './bids/bids.component';
+
 
 @NgModule({
   declarations: [
@@ -69,7 +72,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     PlaceOrderComponent,
     OrdersComponent,
     ConfirmComponent,
-    ModifyOrderComponent
+    ModifyOrderComponent,
+    AddServiceComponent,
+    BidsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

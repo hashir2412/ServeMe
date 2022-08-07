@@ -1,0 +1,14 @@
+<app-loading [show$]="loading$"></app-loading>
+<h1 mat-dialog-title>Add Service</h1>
+<mat-dialog-content>
+    <mat-form-field appearance="fill">
+        <mat-label>Service Category</mat-label>
+        <mat-select [(ngModel)]="selectedService" required>
+            <mat-option *ngFor="let service of services$ | async" [value]="service">{{service.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button (click)="onAdd()" cdkFocusInitial>Add</button>
+</mat-dialog-actions>

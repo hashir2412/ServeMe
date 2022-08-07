@@ -27,7 +27,7 @@ namespace ServeMe.Controllers
 
         // GET api/<ServiceController>/5
         [HttpGet("{id}")]
-        public async Task<ResponseBaseModel<IEnumerable<ServiceDto>>> GetServicesByVendor(int id)
+        public async Task<ResponseBaseModel<IEnumerable<ServiceCategoryDto>>> GetServicesByVendor(int id)
         {
             return await _serviceDomain.GetServicesByVendor(id);
         }

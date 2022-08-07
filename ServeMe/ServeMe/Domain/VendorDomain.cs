@@ -1,5 +1,6 @@
 ﻿using ServeMe.Models;
 using ServeMe.Repository;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ServeMe.Domain
@@ -23,6 +24,22 @@ namespace ServeMe.Domain
         {
             return await _vendorRepository.GetVendorDetails(id);
         }
+
+        public async Task<ResponseBaseModel<int>> PlaceBid(BidDto bid)
+        {
+            return await _vendorRepository.PlaceBid(bid);
+        }
+
+        public async Task<ResponseBaseModel<int>> UpdateBid(BidDto bid)
+        {
+            return await _vendorRepository.UpdateBid(bid);
+        }
+
+        public async Task<ResponseBaseModel<IEnumerable<CartDto>>> GetActiveBidsByVendor(int id)
+        {
+            return await _vendorRepository.GetActiveBidsByVendor(id);
+        }
+        
 
         public async Task<ResponseBaseModel<int>> Register(VendorDto vendor, string password)
         {

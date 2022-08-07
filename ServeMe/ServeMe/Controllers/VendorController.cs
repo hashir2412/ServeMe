@@ -13,10 +13,12 @@ namespace ServeMe.Controllers
     public class VendorController : ControllerBase
     {
         private readonly IVendorDomain _vendorDomain;
+        private readonly IOrderDomain _orderDomain;
 
-        public VendorController(IVendorDomain vendorDomain)
+        public VendorController(IVendorDomain vendorDomain, IOrderDomain orderDomain)
         {
             _vendorDomain = vendorDomain;
+            _orderDomain = orderDomain;
         }
         // GET: api/<VendorController>
         [HttpGet]
@@ -36,6 +38,54 @@ namespace ServeMe.Controllers
         public async Task<ResponseBaseModel<VendorDashboardDto>> GetVendorDashboardDetails(int id)
         {
             return await _vendorDomain.GetVendorDashboardDetails(id);
+        }
+
+        [HttpGet("order")]
+        public async Task<ResponseBaseModel<IEnumerable<OrderDto>>> GetVendorOrders(int id)
+        {
+            return await _orderDomain.GetOrdersByVendor(id);
+        }
+
+        [HttpGet("activebid")]
+        public async Task<ResponseBaseModel<IEnumerable<CartDto>>> GetActiveBidsByVendor(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                return await _vendorDomain.GetActiveBidsByVendor(id);
+            }
+            else
+            {
+                return new ResponseBaseModel<IEnumerable<CartDto>>() { Body = new List<CartDto>(), Message = "Error", StatusCode = 1 };
+            }
+
+        }
+
+        [HttpPost("bid")]
+        public async Task<ResponseBaseModel<int>> PlaceBid(BidDto bid)
+        {
+            if (ModelState.IsValid)
+            {
+                return await _vendorDomain.PlaceBid(bid);
+            }
+            else
+            {
+                return new ResponseBaseModel<int>() { Body = -1, Message = "Error", StatusCode = 1 };
+            }
+
+        }
+
+        [HttpPut("bid")]
+        public async Task<ResponseBaseModel<int>> UpdateBid(BidDto bid)
+        {
+            if (ModelState.IsValid)
+            {
+                return await _vendorDomain.UpdateBid(bid);
+            }
+            else
+            {
+                return new ResponseBaseModel<int>() { Body = -1, Message = "Error", StatusCode = 1 };
+            }
+
         }
 
         // POST api/<UserController>

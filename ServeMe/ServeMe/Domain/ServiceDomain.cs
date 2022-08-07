@@ -17,7 +17,7 @@ namespace ServeMe.Domain
             return await _serviceRepository.GetServices();
         }
 
-        public async Task<ResponseBaseModel<IEnumerable<ServiceDto>>> GetServicesByVendor(int id)
+        public async Task<ResponseBaseModel<IEnumerable<ServiceCategoryDto>>> GetServicesByVendor(int id)
         {
             return await _serviceRepository.GetServicesByVendor(id);
         }

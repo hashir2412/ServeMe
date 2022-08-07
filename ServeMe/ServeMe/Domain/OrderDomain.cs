@@ -33,6 +33,11 @@ namespace ServeMe.Domain
             return await _orderRepository.GetOrdersByUser(id);
         }
 
+        public async Task<ResponseBaseModel<IEnumerable<OrderDto>>> GetOrdersByVendor(int id)
+        {
+            return await _orderRepository.GetOrdersByVendor(id);
+        }
+
         public async Task<ResponseBaseModel<int>> ModifyCart(int cartId, DateTime dateTime)
         {
             return await _orderRepository.ModifyCart(cartId, dateTime);

@@ -12,6 +12,6 @@ namespace ServeMe.Domain
 
         Task<ResponseBaseModel<IEnumerable<ServiceCategoryDto>>> GetServices();
 
-        Task<ResponseBaseModel<IEnumerable<ServiceDto>>> GetServicesByVendor(int id);
+        Task<ResponseBaseModel<IEnumerable<ServiceCategoryDto>>> GetServicesByVendor(int id);
     }
 }

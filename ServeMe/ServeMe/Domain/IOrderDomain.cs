@@ -9,6 +9,8 @@ namespace ServeMe.Domain
     {
         Task<ResponseBaseModel<IEnumerable<OrderDto>>> GetOrdersByUser(int id);
 
+        Task<ResponseBaseModel<IEnumerable<OrderDto>>> GetOrdersByVendor(int id);
+
         Task<ResponseBaseModel<int>> PlaceOrder(OrderRequestModel order);
 
         Task<ResponseBaseModel<int>> CancelCart(int cartId);

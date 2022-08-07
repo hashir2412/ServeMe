@@ -38,14 +38,14 @@ namespace ServeMe.Repository
             }
         }
 
-        public async Task<ResponseBaseModel<IEnumerable<ServiceDto>>> GetServicesByVendor(int id)
+        public async Task<ResponseBaseModel<IEnumerable<ServiceCategoryDto>>> GetServicesByVendor(int id)
         {
             using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
             {
-                var sql = "select * from Service where ServiceID=@id";
-                var result = await connection.QueryAsync<ServiceDbModel>(sql, id);
-                var serviceDto = _mapper.Map<IEnumerable<ServiceDto>>(result);
-                return new ResponseBaseModel<IEnumerable<ServiceDto>>()
+                var sql = "select * from Service inner join ServiceCategory on Service.ServiceCategoryID = ServiceCategory.ServiceCategoryID where Service.VendorID=@id";
+                var result = await connection.QueryAsync<ServiceCategoryDbModel>(sql, new { id = id });
+                var serviceDto = _mapper.Map<IEnumerable<ServiceCategoryDto>>(result);
+                return new ResponseBaseModel<IEnumerable<ServiceCategoryDto>>()
                 {
                     Body = serviceDto,
                     Message = "Success",
@@ -73,8 +73,8 @@ namespace ServeMe.Repository
                 var serviceDbModel = _mapper.Map<ServiceDbModel>(service);
                 var sql = "UPDATE Service SET Status = @Status WHERE ServiceID=@ServiceID;";
                 var rowsAffected = await connection.QueryFirstOrDefaultAsync<int>(sql, serviceDbModel);
-                return rowsAffected > 0 ? new ResponseBaseModel<int>() { Body = rowsAffected, Message = "Successfully Added", StatusCode = 0 } :
-                    new ResponseBaseModel<int>() { Body = -1, Message = "Failed to add service", StatusCode = 1 };
+                return rowsAffected > 0 ? new ResponseBaseModel<int>() { Body = rowsAffected, Message = "Successfully Updated", StatusCode = 0 } :
+                    new ResponseBaseModel<int>() { Body = -1, Message = "Failed to update service", StatusCode = 1 };
             }
         }
     }

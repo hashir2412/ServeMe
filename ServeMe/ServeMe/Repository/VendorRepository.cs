@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ServeMe.Models;
 using ServeMe.Repository.Models;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -92,6 +93,28 @@ namespace ServeMe.Repository
             }
         }
 
+        public async Task<ResponseBaseModel<int>> PlaceBid(BidDto bid)
+        {
+            using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
+            {
+                var sql = "INSERT INTO Bid (CartId,VendorId,Amount) VALUES(@CartId,@VendorId,@Amount);SELECT CAST(SCOPE_IDENTITY() as int)";
+                var rowsAffected = await connection.QueryFirstOrDefaultAsync<int>(sql, bid);
+                return rowsAffected > 0 ? new ResponseBaseModel<int>() { Body = rowsAffected, Message = "Successfully Added Bid", StatusCode = 0 } :
+                    new ResponseBaseModel<int>() { Body = -1, Message = "Failed to add bid", StatusCode = 1 };
+            }
+        }
+
+        public async Task<ResponseBaseModel<int>> UpdateBid(BidDto bid)
+        {
+            using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
+            {
+                var sql = "Update Bid set Amount=@Amount where CartId=@CartId";
+                var rowsAffected = await connection.QueryFirstOrDefaultAsync<int>(sql, bid);
+                return rowsAffected > 0 ? new ResponseBaseModel<int>() { Body = rowsAffected, Message = "Successfully Updated Bid", StatusCode = 0 } :
+                    new ResponseBaseModel<int>() { Body = -1, Message = "Failed to update bid", StatusCode = 1 };
+            }
+        }
+
         public async Task<ResponseBaseModel<int>> Register(VendorDto vendor)
         {
             using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
@@ -110,6 +133,59 @@ namespace ServeMe.Repository
                 var rowsAffected = await connection.QueryFirstOrDefaultAsync<int>(sql, vendorDbModel);
                 return rowsAffected > 0 ? new ResponseBaseModel<int>() { Body = rowsAffected, Message = "Successfully Registered", StatusCode = 0 } :
                     new ResponseBaseModel<int>() { Body = -1, Message = "Failed to register", StatusCode = 1 };
+            }
+        }
+
+        public async Task<ResponseBaseModel<IEnumerable<CartDto>>> GetActiveBidsByVendor(int id)
+        {
+            using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
+            {
+                var sql = "select * from Cart inner join Service on Cart.ServiceCategoryId = Service.ServiceCategoryID " +
+                    "left join Bid on Bid.CartId = Cart.CartId where Cart.StatusID = 1 and ";
+                var parameters = new { Id = id };
+
+                var SalesCartList = await connection.QueryAsync<CartDbModel, OrderDbModel, ServiceCategoryDbModel, BidDbModel, CartDbModel>(sql,
+                    (cart, order, servicecategory, bid) =>
+                    {
+                        //if (bid != null)
+                        //{
+                        //    cart.Bids.Add(bid);
+                        //}
+                        cart.Order = order;
+                        cart.ServiceCategory = servicecategory;
+                        if (bid != null)
+                        {
+                            cart.Bids.Add(bid);
+                        }
+                        return cart;
+                    }, parameters, splitOn: "OrderID,ServiceCategoryID,BidId"
+                    );
+                List<OrderDto> result = new List<OrderDto>();
+                var salesCartGroupedList = SalesCartList.GroupBy(u => u.Order.OrderID)
+                                      .Select(grp => new { Id = grp.Key, Items = grp.ToList() })
+                                      .ToList();
+                foreach (var i in salesCartGroupedList)
+                {
+                    var cart = SalesCartList.FirstOrDefault(res => res.Order.OrderID == i.Id);
+                    OrderDto finalCart = new OrderDto();
+                    finalCart.Id = i.Id;
+                    finalCart.Items = new List<CartDto>();
+                    i.Items.ForEach(item =>
+                    {
+                        finalCart.Items.Add(_mapper.Map<CartDto>(item));
+                    });
+                    finalCart.AddressLine1 = cart.Order.AddressLine1;
+                    finalCart.AddressLine2 = cart.Order.AddressLine2;
+                    finalCart.State = cart.Order.State;
+                    finalCart.City = cart.Order.City;
+                    finalCart.Pincode = cart.Order.Pincode;
+                    finalCart.Date = cart.Order.Date;
+                    finalCart.Total = cart.Order.Total;
+                    finalCart.Name = cart.Order.Name;
+                    finalCart.Phone = cart.Order.Phone;
+                    result.Add(finalCart);
+                }
+                return new ResponseBaseModel<IEnumerable<CartDto>>() { Body = null, Message = "Success", StatusCode = 0 };
             }
         }
     }
