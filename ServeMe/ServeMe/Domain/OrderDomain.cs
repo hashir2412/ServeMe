@@ -101,6 +101,13 @@ namespace ServeMe.Domain
                                     Quantity = cart.Quantity,
                                     StatusID = 1,
                                     ServiceCategoryID = cart.ServiceCategoryId,
+                                    AddressLine1 = order.AddressLine1,
+                                    AddressLine2 = order.AddressLine2,
+                                    City = order.City,
+                                    State = order.State,
+                                    Pincode = order.Pincode,
+                                    Name = order.Name,
+                                    Phone = order.Phone,
                                 }, conn, tran));
                             }
                             await Task.WhenAll(tasks);

@@ -99,7 +99,7 @@ namespace ServeMe.Repository
         public async Task<ResponseBaseModel<int>> AddToCart(CartDbModel cart, SqlConnection connection, SqlTransaction transaction)
         {
             cart.DateFormat = cart.Date.ToString("yyyy-MM-ddTHH:mm:ss");
-            var sql = "INSERT INTO Cart (OrderID,StatusID,ServiceCategoryId,Rate, Quantity, Date) VALUES(@OrderID, @StatusID,@ServiceCategoryId,@Rate,@Quantity,@DateFormat);SELECT CAST(SCOPE_IDENTITY() as int)";
+            var sql = "INSERT INTO Cart (OrderID,StatusID,ServiceCategoryId,Rate, Quantity, Date,AddressLine1,AddressLine2,City,State,Pincode,Phone,Name) VALUES(@OrderID, @StatusID,@ServiceCategoryId,@Rate,@Quantity,@DateFormat,@AddressLine1,@AddressLine2,@City,@State,@Pincode,@Phone,@Name);SELECT CAST(SCOPE_IDENTITY() as int)";
             var rowsAffected = await connection.QueryFirstOrDefaultAsync<int>(sql, cart, transaction);
             return rowsAffected > 0 ? new ResponseBaseModel<int>() { Body = rowsAffected, Message = "Successfully Added to cart", StatusCode = 0 } :
                 new ResponseBaseModel<int>() { Body = -1, Message = "Failed to add cart", StatusCode = 1 };

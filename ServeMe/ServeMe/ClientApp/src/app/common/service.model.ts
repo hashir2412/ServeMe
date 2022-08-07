@@ -34,6 +34,13 @@ export class CartResponseModel {
     date: Date;
     serviceCategory: ServiceCategory;
     bids: BidResponseModel[];
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    state: string;
+    pincode: string;
+    phone: string;
+    name: string;
 }
 
 

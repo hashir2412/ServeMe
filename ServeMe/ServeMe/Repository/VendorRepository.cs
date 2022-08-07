@@ -98,7 +98,7 @@ namespace ServeMe.Repository
             using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
             {
                 var sql = "INSERT INTO Bid (CartId,VendorId,Amount) VALUES(@CartId,@VendorId,@Amount);SELECT CAST(SCOPE_IDENTITY() as int)";
-                var rowsAffected = await connection.QueryFirstOrDefaultAsync<int>(sql, bid);
+                var rowsAffected = await connection.ExecuteAsync(sql, bid);
                 return rowsAffected > 0 ? new ResponseBaseModel<int>() { Body = rowsAffected, Message = "Successfully Added Bid", StatusCode = 0 } :
                     new ResponseBaseModel<int>() { Body = -1, Message = "Failed to add bid", StatusCode = 1 };
             }
@@ -108,10 +108,18 @@ namespace ServeMe.Repository
         {
             using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
             {
-                var sql = "Update Bid set Amount=@Amount where CartId=@CartId";
-                var rowsAffected = await connection.QueryFirstOrDefaultAsync<int>(sql, bid);
-                return rowsAffected > 0 ? new ResponseBaseModel<int>() { Body = rowsAffected, Message = "Successfully Updated Bid", StatusCode = 0 } :
-                    new ResponseBaseModel<int>() { Body = -1, Message = "Failed to update bid", StatusCode = 1 };
+                var getBid = "select * from Bid where BidId=@BidId";
+                var result = await connection.QueryFirstOrDefaultAsync<BidDbModel>(getBid, bid);
+                if(result == null)
+                {
+                    return await PlaceBid(bid);
+                } else
+                {
+                    var sql = "Update Bid set Amount=@Amount where BidId=@BidId";
+                    var rowsAffected = await connection.ExecuteAsync(sql, bid);
+                    return rowsAffected > 0 ? new ResponseBaseModel<int>() { Body = rowsAffected, Message = "Successfully Updated Bid", StatusCode = 0 } :
+                        new ResponseBaseModel<int>() { Body = -1, Message = "Failed to update bid", StatusCode = 1 };
+                }
             }
         }
 

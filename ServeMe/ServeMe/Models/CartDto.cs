@@ -22,6 +22,15 @@ namespace ServeMe.Models
         public ServiceCategoryDto ServiceCategory { get; set; }
 
         public List<BidDto> Bids { get; set; } = new List<BidDto>();
+
+        public string AddressLine1 { get; set; }
+        public string AddressLine2 { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Pincode { get; set; }
+        public string Phone { get; set; }
+
+        public string Name { get; set; }
         //public int CartId { get; set; }
         //public string Name { get; set; }
 
