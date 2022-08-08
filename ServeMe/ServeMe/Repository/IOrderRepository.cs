@@ -19,5 +19,7 @@ namespace ServeMe.Repository
 
         Task<ResponseBaseModel<int>> CancelOrder(int cartId);
         Task<ResponseBaseModel<int>> ModifyCart(int cartId, DateTime dateTime);
+
+        Task<ResponseBaseModel<int>> ConfirmBid(BidDto bidDto);
     }
 }

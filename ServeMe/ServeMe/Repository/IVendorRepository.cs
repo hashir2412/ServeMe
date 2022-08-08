@@ -7,6 +7,8 @@ namespace ServeMe.Repository
     public interface IVendorRepository
     {
         Task<ResponseBaseModel<int>> Register(VendorDto user);
+
+        Task<ResponseBaseModel<IEnumerable<VendorDto>>> GetVendors();
         Task<ResponseBaseModel<VendorDto>> GetVendorDetails(int id);
         Task<ResponseBaseModel<int>> PlaceBid(BidDto bid);
 

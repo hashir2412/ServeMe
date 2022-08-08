@@ -4,6 +4,7 @@ using ServeMe.Repository;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServeMe.Domain
@@ -13,14 +14,16 @@ namespace ServeMe.Domain
         private readonly IOrderRepository _orderRepository;
         private readonly IPaymentRepository _paymentRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IVendorRepository _vendorRepository;
         private readonly AppSettings _appSettings;
 
-        public OrderDomain(IOrderRepository userRepository, IPaymentRepository credsRepository, IOptions<AppSettings> appSettings, IUserRepository userRepository1)
+        public OrderDomain(IOrderRepository userRepository, IPaymentRepository credsRepository, IOptions<AppSettings> appSettings, IUserRepository userRepository1, IVendorRepository vendorRepository)
         {
             _orderRepository = userRepository;
             _paymentRepository = credsRepository;
             _appSettings = appSettings.Value;
             _userRepository = userRepository1;
+            _vendorRepository = vendorRepository;
         }
 
         public Task<ResponseBaseModel<int>> CancelCart(int cartId)
@@ -28,9 +31,27 @@ namespace ServeMe.Domain
             return _orderRepository.CancelOrder(cartId);
         }
 
+        public Task<ResponseBaseModel<int>> ConfirmBid(BidDto bidDto)
+        {
+            return _orderRepository.ConfirmBid(bidDto);
+        }
+
         public async Task<ResponseBaseModel<IEnumerable<OrderDto>>> GetOrdersByUser(int id)
         {
-            return await _orderRepository.GetOrdersByUser(id);
+            var result = await _orderRepository.GetOrdersByUser(id);
+            var vendors = await _vendorRepository.GetVendors();
+            foreach (var order in result.Body)
+            {
+                foreach (var item in order.Items)
+                {
+                    foreach (var bid in item.Bids)
+                    {
+                        var vendor = vendors.Body.FirstOrDefault(vdr => vdr.VendorId == bid.VendorId);
+                        bid.VendorName = vendor.Name;
+                    }
+                }
+            }
+            return result;
         }
 
         public async Task<ResponseBaseModel<IEnumerable<OrderDto>>> GetOrdersByVendor(int id)
@@ -52,7 +73,7 @@ namespace ServeMe.Domain
                     var userExist = await _userRepository.GetUserDetails(order.Email);
                     if (userExist.StatusCode != 0 && userExist.Message == "User not found")
                     {
-                        var user = await _userRepository.Register(new UserDto() { Email = order.Email,Phone = order.Phone });
+                        var user = await _userRepository.Register(new UserDto() { Email = order.Email, Phone = order.Phone });
                         if (user.StatusCode != 0)
                         {
                             return new ResponseBaseModel<int>() { Body = 1, Message = "Error placing order", StatusCode = 1 };

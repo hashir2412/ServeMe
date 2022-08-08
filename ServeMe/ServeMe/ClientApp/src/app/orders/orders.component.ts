@@ -74,7 +74,14 @@ export class OrdersComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        this.getOrders();
+        this.http.post<BaseResponseModel<number>>(`${ApiUrl.User}cancelorder?cartId=${item.cartId}`, {}).subscribe(res => {
+          if (res.statusCode === 0) {
+            this.messageService.add({ severity: 'success', detail: 'Successfully cancelled the order' });
+            this.getOrders();
+          } else {
+            this.messageService.add({ severity: 'warn', detail: res.message });
+          }
+        });
       }
     });
   }
@@ -91,6 +98,31 @@ export class OrdersComponent implements OnInit {
         this.getOrders();
       }
     });
+  }
+
+  onConfirmBid(bid: BidResponseModel) {
+    const dialogRef = this.dialog.open(ConfirmComponent, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.loading$.next(true);
+        this.http.post<BaseResponseModel<number>>(`${ApiUrl.User}confirmbid`, bid).subscribe(res => {
+          this.loading$.next(false);
+          if (res.statusCode === 0) {
+            this.messageService.add({ severity: 'success', detail: res.message });
+            this.getOrders();
+          } else {
+            this.messageService.add({ severity: 'warn', detail: res.message });
+          }
+        });
+      }
+    });
+  }
+
+  isCancelModifyAllowed(item: CartResponseModel) {
+    return (item.statusId === 1 || item.statusId === 2);
   }
 }
 
@@ -134,4 +166,5 @@ class BidResponseModel {
   cartId: number;
   vendorId: number;
   amount: number;
+  vendorName: string;
 }

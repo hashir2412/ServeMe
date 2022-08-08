@@ -110,10 +110,11 @@ namespace ServeMe.Repository
             {
                 var getBid = "select * from Bid where BidId=@BidId";
                 var result = await connection.QueryFirstOrDefaultAsync<BidDbModel>(getBid, bid);
-                if(result == null)
+                if (result == null)
                 {
                     return await PlaceBid(bid);
-                } else
+                }
+                else
                 {
                     var sql = "Update Bid set Amount=@Amount where BidId=@BidId";
                     var rowsAffected = await connection.ExecuteAsync(sql, bid);
@@ -194,6 +195,17 @@ namespace ServeMe.Repository
                 //}
                 var result = _mapper.Map<IEnumerable<CartDto>>(SalesCartList);
                 return new ResponseBaseModel<IEnumerable<CartDto>>() { Body = result, Message = "Success", StatusCode = 0 };
+            }
+        }
+
+        public async Task<ResponseBaseModel<IEnumerable<VendorDto>>> GetVendors()
+        {
+            using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
+            {
+                var getBid = "select * from Vendors";
+                var result = await connection.QueryAsync<VendorDbModel>(getBid);
+                var res = _mapper.Map<IEnumerable<VendorDto>>(result);
+                return new ResponseBaseModel<IEnumerable<VendorDto>>() { Body = res, Message = "Get Details successfully", StatusCode = 0 };
             }
         }
     }

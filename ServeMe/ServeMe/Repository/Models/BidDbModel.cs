@@ -9,5 +9,7 @@
         public int VendorId { get; set; }
 
         public double Amount { get; set; }
+
+
     }
 }

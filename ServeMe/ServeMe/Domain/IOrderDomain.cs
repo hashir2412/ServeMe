@@ -17,5 +17,7 @@ namespace ServeMe.Domain
 
         Task<ResponseBaseModel<int>> ModifyCart(int cartId,DateTime dateTime);
 
+        Task<ResponseBaseModel<int>> ConfirmBid(BidDto bidDto);
+
     }
 }

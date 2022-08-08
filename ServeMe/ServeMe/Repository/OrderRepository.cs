@@ -113,7 +113,7 @@ namespace ServeMe.Repository
 
                 //var userDto = new UserDto { Name = user.Name, Phone = user.Phone, Email = user.Email, ReceiveCommunication = user.ReceiveCommunication, Point = user.Point };
                 var sql = "Update Cart SET StatusID = 3 where CartID = @cartId";
-                var idOfNewRow = await connection.QueryFirstOrDefaultAsync<int>(sql, parameters);
+                var idOfNewRow = await connection.ExecuteAsync(sql, parameters);
                 return idOfNewRow == 1 ? new ResponseBaseModel<int>() { Body = idOfNewRow, Message = "Successfully Cancelled the order", StatusCode = 0 } :
                     new ResponseBaseModel<int>() { Body = -1, Message = "Failed to cancel the order", StatusCode = 1 };
             }
@@ -192,6 +192,17 @@ namespace ServeMe.Repository
                 //    Message = "Success",
                 //    StatusCode = 0
                 //};
+            }
+        }
+
+        public async Task<ResponseBaseModel<int>> ConfirmBid(BidDto bidDto)
+        {
+            using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
+            {
+                var sql = "Update Cart SET StatusID=2,VendorId=@VendorId,Rate=@Amount where cartId=@CartId";
+                var idOfNewRow = await connection.ExecuteAsync(sql, bidDto);
+                return idOfNewRow == 1 ? new ResponseBaseModel<int>() { Body = idOfNewRow, Message = "Successfully confirmed the bid", StatusCode = 0 } :
+                    new ResponseBaseModel<int>() { Body = -1, Message = "Failed to confirm the bid", StatusCode = 1 };
             }
         }
     }

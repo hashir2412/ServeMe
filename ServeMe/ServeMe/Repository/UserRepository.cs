@@ -30,7 +30,7 @@ namespace ServeMe.Repository
                 var reviewRatingDbModel = _mapper.Map<ReviewsRatingsDbModel>(value);
                 reviewRatingDbModel.Date = System.DateTime.Now;
                 var sql = "INSERT INTO ReviewsRatings (ServiceID, CartID,UserID,Comment,Stars, Date) VALUES(@ServiceID, @CartID,@UserID,@Comment,@Stars, @Date);SELECT CAST(SCOPE_IDENTITY() as int)";
-                var idOfNewRow = await connection.QueryFirstOrDefaultAsync<int>(sql, reviewRatingDbModel);
+                var idOfNewRow = await connection.ExecuteAsync(sql, reviewRatingDbModel);
                 return idOfNewRow > 0 ? new ResponseBaseModel<int>() { Body = idOfNewRow, Message = "Successfully Added Review", StatusCode = 0 } :
                     new ResponseBaseModel<int>() { Body = -1, Message = "Failed to add review", StatusCode = 1 };
             }

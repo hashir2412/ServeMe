@@ -102,6 +102,19 @@ namespace ServeMe.Controllers
             }
         }
 
+        [HttpPost("confirmbid")]
+        public async Task<ResponseBaseModel<int>> ConfirmBid(BidDto bidDto)
+        {
+            if (ModelState.IsValid)
+            {
+                return await _orderDomain.ConfirmBid(bidDto);
+            }
+            else
+            {
+                return new ResponseBaseModel<int>() { Body = -1, Message = "Error", StatusCode = 1 };
+            }
+        }
+
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
