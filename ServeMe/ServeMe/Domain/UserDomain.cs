@@ -31,7 +31,16 @@ namespace ServeMe.Domain
                 var res = await _credsRepository.Register(user.Email, password, true);
                 if (res)
                 {
-                    return await _userRepository.Register(user);
+                    var userDetails = await _userRepository.GetUserDetails(user.Email);
+                    if (userDetails.StatusCode != 0 && userDetails.Message == "User not found")
+                    {
+                        return await _userRepository.Register(user);
+                    }
+                    else
+                    {
+                        return new ResponseBaseModel<int>() { Body = userDetails.Body.UserId, Message = "Successfully Registered", StatusCode = 0 };
+                    }
+
                 }
                 else
                 {
