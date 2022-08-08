@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class ReviewsRatingsComponent implements OnInit {
   stars: number[] = [1, 2, 3, 4, 5];
   selectedValue: number;
+  comment = ''
   constructor() { }
 
   ngOnInit(): void {
