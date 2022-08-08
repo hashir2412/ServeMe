@@ -205,5 +205,16 @@ namespace ServeMe.Repository
                     new ResponseBaseModel<int>() { Body = -1, Message = "Failed to confirm the bid", StatusCode = 1 };
             }
         }
+
+        public async Task<ResponseBaseModel<int>> MarkOrderComplete(CartDto cartDto)
+        {
+            using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
+            {
+                var sql = "Update Cart SET StatusID=4 where cartId=@CartId";
+                var idOfNewRow = await connection.ExecuteAsync(sql, cartDto);
+                return idOfNewRow == 1 ? new ResponseBaseModel<int>() { Body = idOfNewRow, Message = "Successfully completed the order", StatusCode = 0 } :
+                    new ResponseBaseModel<int>() { Body = -1, Message = "Failed to complete the order", StatusCode = 1 };
+            }
+        }
     }
 }

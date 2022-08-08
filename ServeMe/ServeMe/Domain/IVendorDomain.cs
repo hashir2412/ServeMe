@@ -18,6 +18,8 @@ namespace ServeMe.Domain
 
         Task<ResponseBaseModel<IEnumerable<CartDto>>> GetActiveBidsByVendor(int id);
 
+        Task<ResponseBaseModel<int>> MarkOrderComplete(CartDto cartDto);
+
 
     }
 }

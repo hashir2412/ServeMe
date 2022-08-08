@@ -103,6 +103,20 @@ namespace ServeMe.Controllers
 
         }
 
+        [HttpPost("ordercomplete")]
+        public async Task<ResponseBaseModel<int>> MarkOrderComplete(CartDto cart)
+        {
+            if (ModelState.IsValid)
+            {
+                return await _vendorDomain.MarkOrderComplete(cart);
+            }
+            else
+            {
+                return new ResponseBaseModel<int>() { Body = -1, Message = "Error", StatusCode = 1 };
+            }
+
+        }
+
 
         // PUT api/<VendorController>/5
         [HttpPut("{id}")]

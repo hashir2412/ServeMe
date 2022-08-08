@@ -19,11 +19,15 @@ import { UserModel } from 'src/app/registration-login/registration-login.model';
 export class VendorProfileComponent {
   loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   services$: BehaviorSubject<ServiceCategory[]> = new BehaviorSubject<ServiceCategory[]>([]);
-
+  
   constructor(private http: HttpClient, private store: AppMemoryStoreService, private dialog: MatDialog, private service: MessageService) {
 
   }
   ngOnInit(): void {
+    this.getServices();
+  }
+
+  private getServices() {
     this.loading$.next(true);
     const userId = this.store.get<UserModel>(Keys.User)?.userID != null ? this.store.get<UserModel>(Keys.User)?.userID : 0;
     if (userId > 0) {
@@ -50,9 +54,9 @@ export class VendorProfileComponent {
         this.http.post<BaseResponseModel<number>>(ApiUrl.Service, serviceModel).subscribe(res => {
           if (res.statusCode === 0) {
             this.service.add({ severity: 'success', detail: 'Successfully added service' });
+            this.getServices();
           }
         });
-        console.log('closd');
       }
     });
   }

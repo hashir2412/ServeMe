@@ -9,10 +9,12 @@ namespace ServeMe.Domain
     {
         private readonly IVendorRepository _vendorRepository;
         private readonly ICredsRepository _credsRepository;
-        public VendorDomain(IVendorRepository userRepository, ICredsRepository credsRepository)
+        private readonly IOrderRepository _orderRepository;
+        public VendorDomain(IVendorRepository userRepository, ICredsRepository credsRepository, IOrderRepository orderRepository)
         {
             _vendorRepository = userRepository;
             _credsRepository = credsRepository;
+            _orderRepository = orderRepository;
         }
 
         public async Task<ResponseBaseModel<VendorDashboardDto>> GetVendorDashboardDetails(int id)
@@ -60,6 +62,11 @@ namespace ServeMe.Domain
                     return new ResponseBaseModel<int>() { Body = -1, Message = "Failed to register", StatusCode = 1 };
                 }
             }
+        }
+
+        public async Task<ResponseBaseModel<int>> MarkOrderComplete(CartDto cartDto)
+        {
+            return await _orderRepository.MarkOrderComplete(cartDto);
         }
     }
 }

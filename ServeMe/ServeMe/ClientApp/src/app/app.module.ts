@@ -53,7 +53,10 @@ import { ToastModule } from 'primeng/toast';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { AddServiceComponent } from './add-service/add-service.component';
 import { BidsComponent } from './bids/bids.component';
-
+import { ChartModule } from 'primeng/chart';
+import { ServicesComponent } from './services/services.component';
+import { VendorStatsComponent } from './vendor-stats/vendor-stats.component';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +77,10 @@ import { BidsComponent } from './bids/bids.component';
     ConfirmComponent,
     ModifyOrderComponent,
     AddServiceComponent,
-    BidsComponent
+    BidsComponent,
+    ServicesComponent,
+    VendorStatsComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -85,9 +91,10 @@ import { BidsComponent } from './bids/bids.component';
       { path: 'home', component: HomeComponent, },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'profile', component: ProfileComponent, canActivate: [ProfileGuard] },
+      { path: 'profile', component: ProfileComponent },
       { path: 'cart', component: PlaceOrderComponent },
-      { path: 'orders', component: OrdersComponent, canActivate: [ProfileGuard] }
+      { path: 'orders', component: OrdersComponent },
+      { path: 'searchvendor', component: SearchComponent }
     ], { relativeLinkResolution: 'legacy', useHash: true }),
     BrowserAnimationsModule,
     MatFormFieldModule,
@@ -117,7 +124,8 @@ import { BidsComponent } from './bids/bids.component';
     MatNativeDateModule,
     MatSelectModule,
     ToastModule,
-    MatToolbarModule
+    MatToolbarModule,
+    ChartModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true }, AppMemoryStoreService],
   bootstrap: [AppComponent]

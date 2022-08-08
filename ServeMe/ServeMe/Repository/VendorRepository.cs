@@ -29,8 +29,12 @@ namespace ServeMe.Repository
             using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
             {
                 var parameters = new { UserID = id };
-                var sql = "select Sum(0.8*Rate*Quantity) as 'Total',Cart.Date as 'Date' from Cart inner join Service on Cart.ServiceId=Service.ServiceId where VendorID = @UserID and Cart.StatusID = 2 group by Cart.Date";
-                var result = await connection.QueryFirstOrDefaultAsync<Orders>(sql, parameters);
+                var sql = "select 0.8*Rate from Cart where VendorId = @UserID";
+                var totalEarned = await connection.QueryFirstOrDefaultAsync<double>(sql, parameters);
+                var sql2 = "select Avg(Stars) from ReviewsRatings inner join Service on Service.ServiceID = ReviewsRatings.ServiceID where Service.VendorId = @UserID";
+                var avgStars = await connection.QueryFirstOrDefaultAsync<double>(sql2, parameters);
+                var sql3 = "select 0.8*Rate as 'Total',Date from Cart where VendorId = @UserID group by Cart.Date where StatusID = 4 and VendorId = @UserID";
+                var totalPerDay= await connection.QueryFirstOrDefaultAsync<Orders>(sql3, parameters);
                 //var userDto = _mapper.Map<VendorDto>(result);
                 return new ResponseBaseModel<VendorDashboardDto>() { Body = null, Message = "Vendor not found", StatusCode = 1 };
                 //: new ResponseBaseModel<VendorDashboardDto>()
@@ -208,5 +212,7 @@ namespace ServeMe.Repository
                 return new ResponseBaseModel<IEnumerable<VendorDto>>() { Body = res, Message = "Get Details successfully", StatusCode = 0 };
             }
         }
+
+        
     }
 }

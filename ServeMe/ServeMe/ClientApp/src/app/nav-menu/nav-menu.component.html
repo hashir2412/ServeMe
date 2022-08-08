@@ -34,19 +34,26 @@
 <mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="space-between none" style="height: 40px; cursor: pointer;">
   <span style="margin-top: 4px; font-weight: 400;" [routerLink]="['/']">ServeMe</span>
   <div fxLayout="row" fxLayoutAlign="space-between none">
+    <span [routerLink]="['/searchvendor']" style="margin-top: 4px; margin-right: 10px; font-weight: 400;"
+      *ngIf="((user$ | async)!= null && (user$ | async).isCustomer) || (user$ | async) == null">Search
+      Vendor</span>
     <span [routerLink]="['/']" style="margin-top: 4px; margin-right: 10px; font-weight: 400;">Home</span>
     <span [routerLink]="['/cart']" style="margin-top: 4px; margin-right: 10px; font-weight: 400;">View Cart</span>
+    <span *ngIf="(user$ | async) == null" (click)="openDialog()"
+      style="margin-top: 4px; margin-right: 10px; font-weight: 400;">Register/Login</span>
     <button [matMenuTriggerFor]="menu" mat-icon-button class="example-icon"
-      aria-label="Example icon-button with share icon">
+      aria-label="Example icon-button with share icon" *ngIf="(user$ | async) != null">
       <mat-icon>person</mat-icon>
     </button>
+    <span *ngIf="(user$ | async) != null" [matMenuTriggerFor]="menu"
+      style="margin-top: 4px; margin-right: 10px; font-weight: 400;">{{(user$ |
+      async).name}}</span>
     <mat-menu #menu="matMenu">
       <ng-container *ngIf="(user$ | async) != null">
         <button mat-menu-item [routerLink]="['/profile']">View Profile</button>
         <button mat-menu-item [routerLink]="['/orders']">Orders</button>
         <button mat-menu-item (click)="onLogOut()">Log out</button>
       </ng-container>
-      <button (click)="openDialog()" mat-menu-item *ngIf="(user$ | async) == null">Register/Login</button>
     </mat-menu>
   </div>
 

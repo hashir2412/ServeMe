@@ -1,0 +1,20 @@
+<app-loading [show$]="loading$"></app-loading>
+<div fxLayout="column">
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Search Service Provider</mat-label>
+        <input matInput>
+        <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+    <mat-radio-group color="primary" name="userType" aria-labelledby="example-radio-group-label"
+        class="example-radio-group" [(ngModel)]="searchType">
+        <mat-radio-button class="example-radio-button" style="margin-right: 10px;" [value]="type.StarRating">
+            Star Rating
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="type.Address">
+            Address
+        </mat-radio-button>
+        <mat-radio-button class="example-radio-button" [value]="type.Name">
+            Name
+        </mat-radio-button>
+    </mat-radio-group>
+</div>

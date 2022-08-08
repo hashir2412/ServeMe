@@ -1,34 +1,14 @@
 <!-- <button class="btn btn-primary" (click)="encryptUsingAES256()">Increment</button> -->
 <!-- <button class="btn btn-primary" (click)="generate()">Generate</button> -->
-<app-loading [show$]="loading$"></app-loading>
-<div fxLayout="column">
-  <mat-form-field class="example-full-width" appearance="fill">
-    <mat-label>Search Service Provider</mat-label>
-    <input matInput>
-    <mat-icon matSuffix>search</mat-icon>
-  </mat-form-field>
-  <mat-radio-group color="primary" name="userType" aria-labelledby="example-radio-group-label"
-    class="example-radio-group" [(ngModel)]="searchType">
-    <mat-radio-button class="example-radio-button" style="margin-right: 10px;" [value]="type.StarRating">
-      Star Rating
-    </mat-radio-button>
-    <mat-radio-button class="example-radio-button" [value]="type.Address">
-      Address
-    </mat-radio-button>
-    <mat-radio-button class="example-radio-button" [value]="type.Name">
-      Name
-    </mat-radio-button>
-  </mat-radio-group>
-</div>
-<button mat-raised-button type="submit" color="primary">Refresh</button>
-
-<mat-card class="example-card" *ngFor="let service of services$ | async">
+<app-services *ngIf="((user$ | async)!= null && (user$ | async).isCustomer) || (user$ | async) == null"></app-services>
+<app-vendor-stats *ngIf="((user$ | async)!= null && !(user$ | async).isCustomer)"></app-vendor-stats>
+<!-- <mat-card class="example-card" *ngFor="let service of services$ | async">
   <mat-card-title>{{service.name}}</mat-card-title>
   <mat-card-subtitle>{{service.rate}}</mat-card-subtitle>
   <mat-card-content>
-    <p>This card indeterminates progress bar.</p>
-    <!-- <p>{{longText}}</p> -->
-  </mat-card-content>
+    <p>This card indeterminates progress bar.</p> -->
+<!-- <p>{{longText}}</p> -->
+<!-- </mat-card-content>
   <mat-card-actions>
     <div fxLayout="row">
       <button mat-button color="warn" (click)="onAddToCart(service)" *ngIf="service.quantity === 0">Add to
@@ -47,5 +27,6 @@
       <button mat-button>SHARE</button>
     </div>
   </mat-card-actions>
-</mat-card>
-<app-message [messages$]="messages$"></app-message>
+</mat-card> -->
+<!-- 
+<app-message [messages$]="messages$"></app-message> -->

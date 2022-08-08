@@ -42,7 +42,7 @@ export class OrdersComponent implements OnInit {
         this.currentOrders$.next(currentOrders);
         const cancelledOrders = res.body.filter(curr => curr.items.every(item => item.statusId === 3))
         this.cancelledOrders$.next(cancelledOrders);
-        const pastOrders = res.body.filter(curr => curr.items.every(item => item.statusId === 2))
+        const pastOrders = res.body.filter(curr => curr.items.every(item => item.statusId === 4))
         this.pastOrders$.next(pastOrders);
       } else {
         this.messages$.next({ severity: 'warn', detail: res.message });
