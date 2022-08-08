@@ -34,7 +34,7 @@ namespace ServeMe.Repository
                 var sql2 = "select Avg(Stars) from ReviewsRatings inner join Service on Service.ServiceID = ReviewsRatings.ServiceID where Service.VendorId = @UserID";
                 var avgStars = await connection.QueryFirstOrDefaultAsync<double>(sql2, parameters);
                 var sql3 = "select 0.8*Rate as 'Total',Date from Cart where VendorId = @UserID group by Cart.Date where StatusID = 4 and VendorId = @UserID";
-                var totalPerDay= await connection.QueryFirstOrDefaultAsync<Orders>(sql3, parameters);
+                var totalPerDay = await connection.QueryFirstOrDefaultAsync<Orders>(sql3, parameters);
                 //var userDto = _mapper.Map<VendorDto>(result);
                 return new ResponseBaseModel<VendorDashboardDto>() { Body = null, Message = "Vendor not found", StatusCode = 1 };
                 //: new ResponseBaseModel<VendorDashboardDto>()
@@ -153,7 +153,7 @@ namespace ServeMe.Repository
         {
             using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
             {
-                var sql = "select * from Cart inner join Service on Cart.ServiceCategoryId = Service.ServiceCategoryID inner join ServiceCategory on ServiceCategory.ServiceCategoryId = Service.ServiceCategoryId left join Bid on Bid.CartId = Cart.CartId where Cart.StatusID = 1 and Service.VendorId= @Id";
+                var sql = "select * from Cart inner join Service on Cart.ServiceCategoryId = Service.ServiceCategoryID inner join ServiceCategory on ServiceCategory.ServiceCategoryId = Service.ServiceCategoryId left join Bid on Bid.VendorId = Service.VendorId where Cart.StatusID = 1 and Service.VendorId= @Id";
                 var parameters = new { Id = id };
 
                 var SalesCartList = await connection.QueryAsync<CartDbModel, ServiceCategoryDbModel, BidDbModel, CartDbModel>(sql,
@@ -197,6 +197,7 @@ namespace ServeMe.Repository
                 //    finalCart.Phone = cart.Order.Phone;
                 //    result.Add(finalCart);
                 //}
+
                 var result = _mapper.Map<IEnumerable<CartDto>>(SalesCartList);
                 return new ResponseBaseModel<IEnumerable<CartDto>>() { Body = result, Message = "Success", StatusCode = 0 };
             }
@@ -213,6 +214,6 @@ namespace ServeMe.Repository
             }
         }
 
-        
+
     }
 }

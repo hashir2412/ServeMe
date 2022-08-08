@@ -38,7 +38,7 @@ export class OrdersComponent implements OnInit {
     this.http.get<BaseResponseModel<OrderResponseModel[]>>(`${ApiUrl.Order}?id=${userId}`).subscribe(res => {
       this.loading$.next(false);
       if (res.statusCode === 0) {
-        const currentOrders = res.body.filter(curr => curr.items.some(item => item.statusId === 1))
+        const currentOrders = res.body.filter(curr => curr.items.some(item => item.statusId === 1 || item.statusId === 2))
         this.currentOrders$.next(currentOrders);
         const cancelledOrders = res.body.filter(curr => curr.items.every(item => item.statusId === 3))
         this.cancelledOrders$.next(cancelledOrders);
@@ -159,6 +159,7 @@ class CartResponseModel {
   serviceCategoryId: number;
   serviceCategory: ServiceCategory;
   bids: BidResponseModel;
+  vendorId: number;
 }
 
 class BidResponseModel {

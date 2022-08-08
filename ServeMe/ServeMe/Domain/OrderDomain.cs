@@ -54,7 +54,7 @@ namespace ServeMe.Domain
             return result;
         }
 
-        public async Task<ResponseBaseModel<IEnumerable<OrderDto>>> GetOrdersByVendor(int id)
+        public async Task<ResponseBaseModel<IEnumerable<CartDto>>> GetOrdersByVendor(int id)
         {
             return await _orderRepository.GetOrdersByVendor(id);
         }
@@ -128,7 +128,7 @@ namespace ServeMe.Domain
                                     State = order.State,
                                     Pincode = order.Pincode,
                                     Name = order.Name,
-                                    Phone = order.Phone,
+                                    Phone = order.Phone
                                 }, conn, tran));
                             }
                             await Task.WhenAll(tasks);

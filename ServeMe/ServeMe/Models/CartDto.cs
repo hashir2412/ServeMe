@@ -7,6 +7,8 @@ namespace ServeMe.Models
     {
         public int CartId { get; set; }
 
+        public int VendorId { get; set; }
+
         public int OrderId { get; set; }
 
         public int StatusId { get; set; }

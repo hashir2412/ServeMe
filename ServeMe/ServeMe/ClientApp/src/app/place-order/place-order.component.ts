@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Message, MessageService } from 'primeng/api';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { AppMemoryStoreService } from '../common/app-memory-store';
@@ -29,7 +30,8 @@ export class PlaceOrderComponent implements OnInit {
   cart: ServiceCategory[] = [];
   model: PlaceOrderRequestModel = new PlaceOrderRequestModel();
   tomorrowDate: Date = new Date((new Date()).getDate() + 1);
-  constructor(private store: AppMemoryStoreService, private _formBuilder: FormBuilder, private http: HttpClient, private service: MessageService) { }
+  constructor(private store: AppMemoryStoreService, private _formBuilder: FormBuilder, private http: HttpClient, private service: MessageService,
+    private router: Router) { }
 
   ngOnInit(): void {
     const items = this.store.observe<ServiceCategory[]>(Keys.Cart);
@@ -67,6 +69,7 @@ export class PlaceOrderComponent implements OnInit {
         this.cart = [];
         this.store.add(Keys.Cart, this.cart);
         this.service.add({ severity: 'success', detail: 'Successfully Placed Service Request' });
+        this.router.navigateByUrl('/orders');
       } else {
         this.service.add({ severity: 'warn', detail: res.message });
       }

@@ -60,7 +60,15 @@ namespace ServeMe.Repository
                     finalCart.Items = new List<CartDto>();
                     i.Items.ForEach(item =>
                     {
-                        finalCart.Items.Add(_mapper.Map<CartDto>(item));
+                        var cartFound = finalCart.Items.FirstOrDefault(crt => crt.CartId == item.CartID);
+                        if (cartFound == null)
+                        {
+                            finalCart.Items.Add(_mapper.Map<CartDto>(item));
+                        }
+                        else
+                        {
+                            cartFound.Bids.AddRange(_mapper.Map<IEnumerable<BidDto>>(item.Bids));
+                        }
                     });
                     finalCart.AddressLine1 = cart.Order.AddressLine1;
                     finalCart.AddressLine2 = cart.Order.AddressLine2;
@@ -131,56 +139,56 @@ namespace ServeMe.Repository
             }
         }
 
-        public async Task<ResponseBaseModel<IEnumerable<OrderDto>>> GetOrdersByVendor(int id)
+        public async Task<ResponseBaseModel<IEnumerable<CartDto>>> GetOrdersByVendor(int id)
         {
             using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
             {
-                var sql = "select * from Cart inner join Orders on Orders.OrderID = Cart.OrderID inner join ServiceCategory on Cart.ServiceCategoryId = ServiceCategory.ServiceCategoryID " +
-                    "left join Bid on Bid.CartId = Cart.CartId where Orders.UserID = @Id";
+                var sql = "select * from Cart inner join ServiceCategory on Cart.ServiceCategoryId = ServiceCategory.ServiceCategoryID " +
+                    "where Cart.VendorId = @Id";
                 var parameters = new { Id = id };
 
-                var SalesCartList = await connection.QueryAsync<CartDbModel, OrderDbModel, ServiceCategoryDbModel, BidDbModel, CartDbModel>(sql,
-                    (cart, order, servicecategory, bid) =>
+                var SalesCartList = await connection.QueryAsync<CartDbModel, ServiceCategoryDbModel, CartDbModel>(sql,
+                    (cart, servicecategory) =>
                     {
                         //if (bid != null)
                         //{
                         //    cart.Bids.Add(bid);
                         //}
-                        cart.Order = order;
                         cart.ServiceCategory = servicecategory;
-                        if (bid != null)
-                        {
-                            cart.Bids.Add(bid);
-                        }
+                        //if (bid != null)
+                        //{
+                        //    cart.Bids.Add(bid);
+                        //}
                         return cart;
-                    }, parameters, splitOn: "OrderID,ServiceCategoryID,BidId"
+                    }, parameters, splitOn: "ServiceCategoryID"
                     );
-                List<OrderDto> result = new List<OrderDto>();
-                var salesCartGroupedList = SalesCartList.GroupBy(u => u.Order.OrderID)
-                                      .Select(grp => new { Id = grp.Key, Items = grp.ToList() })
-                                      .ToList();
-                foreach (var i in salesCartGroupedList)
-                {
-                    var cart = SalesCartList.FirstOrDefault(res => res.Order.OrderID == i.Id);
-                    OrderDto finalCart = new OrderDto();
-                    finalCart.Id = i.Id;
-                    finalCart.Items = new List<CartDto>();
-                    i.Items.ForEach(item =>
-                    {
-                        finalCart.Items.Add(_mapper.Map<CartDto>(item));
-                    });
-                    finalCart.AddressLine1 = cart.Order.AddressLine1;
-                    finalCart.AddressLine2 = cart.Order.AddressLine2;
-                    finalCart.State = cart.Order.State;
-                    finalCart.City = cart.Order.City;
-                    finalCart.Pincode = cart.Order.Pincode;
-                    finalCart.Date = cart.Order.Date;
-                    finalCart.Total = cart.Order.Total;
-                    finalCart.Name = cart.Order.Name;
-                    finalCart.Phone = cart.Order.Phone;
-                    result.Add(finalCart);
-                }
-                return new ResponseBaseModel<IEnumerable<OrderDto>>() { Body = result, Message = "Success", StatusCode = 0 };
+                //List<OrderDto> result = new List<OrderDto>();
+                //var salesCartGroupedList = SalesCartList.GroupBy(u => u.Order.OrderID)
+                //                      .Select(grp => new { Id = grp.Key, Items = grp.ToList() })
+                //                      .ToList();
+                //foreach (var i in salesCartGroupedList)
+                //{
+                //    var cart = SalesCartList.FirstOrDefault(res => res.Order.OrderID == i.Id);
+                //    OrderDto finalCart = new OrderDto();
+                //    finalCart.Id = i.Id;
+                //    finalCart.Items = new List<CartDto>();
+                //    i.Items.ForEach(item =>
+                //    {
+                //        finalCart.Items.Add(_mapper.Map<CartDto>(item));
+                //    });
+                //    finalCart.AddressLine1 = cart.Order.AddressLine1;
+                //    finalCart.AddressLine2 = cart.Order.AddressLine2;
+                //    finalCart.State = cart.Order.State;
+                //    finalCart.City = cart.Order.City;
+                //    finalCart.Pincode = cart.Order.Pincode;
+                //    finalCart.Date = cart.Order.Date;
+                //    finalCart.Total = cart.Order.Total;
+                //    finalCart.Name = cart.Order.Name;
+                //    finalCart.Phone = cart.Order.Phone;
+                //    result.Add(finalCart);
+                //}
+                var resut = _mapper.Map<IEnumerable<CartDto>>(SalesCartList);
+                return new ResponseBaseModel<IEnumerable<CartDto>>() { Body = resut, Message = "Success", StatusCode = 0 };
 
                 //var parameters = new { UserID = id };
                 //var sql = "select * from Orders where UserID = @UserID";

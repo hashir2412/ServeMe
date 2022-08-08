@@ -2,9 +2,9 @@
     <div *ngFor="let service of services$ | async" style="margin-bottom: 15px !important; margin-right: 20px;">
         <mat-card style="border-radius: 5px;">
             <mat-card-title>{{service.name}}</mat-card-title>
-            <mat-card-content>
-                <!-- <img mat-card-image src="assets/images/2.jpg" style="width: 112%;"> -->
-            </mat-card-content>
+            <!-- <mat-card-content> -->
+            <!-- <img mat-card-image src="assets/images/2.jpg" style="width: 112%;"> -->
+            <!-- </mat-card-content> -->
             <mat-card-actions>
                 <button mat-button color="warn" (click)="onAddToCart(service)" *ngIf="service.quantity === 0">Add to
                     Cart</button>

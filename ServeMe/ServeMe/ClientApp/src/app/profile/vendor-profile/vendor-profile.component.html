@@ -16,12 +16,8 @@
     </mat-tab>
     <mat-tab label="Orders">
         <ng-template matTabContent>
-            <button mat-raised-button color="primary" (click)="onAddService()">Add Service</button>
-            <div *ngFor="let service of services$ | async;index as i">
-                <h4>{{i+1}}. {{service.name}} <mat-icon>delete</mat-icon>
-                </h4>
-            </div>
+            <app-vendor-orders></app-vendor-orders>
         </ng-template>
     </mat-tab>
-    
+
 </mat-tab-group>

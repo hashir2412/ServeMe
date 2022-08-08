@@ -41,7 +41,7 @@ namespace ServeMe.Controllers
         }
 
         [HttpGet("order")]
-        public async Task<ResponseBaseModel<IEnumerable<OrderDto>>> GetVendorOrders(int id)
+        public async Task<ResponseBaseModel<IEnumerable<CartDto>>> GetVendorOrders(int id)
         {
             return await _orderDomain.GetOrdersByVendor(id);
         }

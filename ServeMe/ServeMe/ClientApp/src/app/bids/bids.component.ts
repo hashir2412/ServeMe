@@ -23,7 +23,7 @@ export class BidsComponent implements OnInit {
   ngOnInit(): void {
     const userId = this.store.get<UserModel>(Keys.User)?.userID != null ? this.store.get<UserModel>(Keys.User)?.userID : 0;
     if (userId > 0) {
-      this.http.get<BaseResponseModel<CartResponseModel[]>>(`${ApiUrl.Vendor}activebid?id=2`).subscribe(res => {
+      this.http.get<BaseResponseModel<CartResponseModel[]>>(`${ApiUrl.Vendor}activebid?id=${userId}`).subscribe(res => {
         console.log(res);
         if (res.statusCode === 0) {
           const items: BidModel[] = [];
@@ -33,11 +33,16 @@ export class BidsComponent implements OnInit {
               serviceCategory: cart.serviceCategory,
               quantity: cart.quantity,
               date: cart.date,
-              amount: cart.bids.length === 1 ? cart.bids[0].amount : 0,
-              bidId: cart.bids.length === 1 ? cart.bids[0].bidId : 0,
+              amount: 0,
+              bidId: 0,
               address: `${cart.addressLine1},${cart.addressLine2},${cart.city},${cart.state},${cart.pincode}`,
               name: cart.name
             };
+            const bid = cart.bids.find(b => b.vendorId === userId && b.cartId === cart.cartId);
+            if (bid) {
+              bidModel.bidId = bid.bidId;
+              bidModel.amount = bid.amount;
+            }
             items.push(bidModel);
           });
           this.items$.next(items);

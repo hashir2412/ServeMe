@@ -9,6 +9,8 @@ namespace ServeMe.Repository.Models
 
         public int OrderID { get; set; }
 
+        public int VendorId { get; set; }
+
         public int StatusID { get; set; }
 
         public int ServiceCategoryID { get; set; }

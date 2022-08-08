@@ -1,0 +1,38 @@
+<app-loading [show$]="loading$"></app-loading>
+<mat-accordion>
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Current Orders
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div fxLayout="column" fxLayoutGap="10px" *ngIf="(currentItems$ | async).length > 0">
+            <div *ngFor="let item of currentItems$ | async;index as i" fxLayout="row"
+                fxLayoutAlign="space-between none">
+                <h4>{{i+1}}. {{item.serviceCategory.name}}</h4>
+                <h4>{{item.date | date:'medium'}}</h4>
+                <h4>Cost: {{item.rate | currency}}</h4>
+                <h4>Quantity: {{item.quantity}}</h4>
+                <button mat-raised-button *ngIf="item.statusId === 2" color="primary"
+                    (click)="onMarkComplete(item)">Mark Complete</button>
+            </div>
+        </div>
+        <h4 *ngIf="(currentItems$ | async).length === 0">No current orders found</h4>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Past Orders
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div fxLayout="column" fxLayoutGap="10px" *ngIf="(pastItems$ | async).length > 0">
+            <div *ngFor="let item of pastItems$ | async;index as i" fxLayout="row" fxLayoutAlign="space-between none">
+                <h4>{{i+1}}. {{item.serviceCategory.name}}</h4>
+                <h4>{{item.date | date:'medium'}}</h4>
+                <h4>Cost: {{item.rate | currency}}</h4>
+                <h4>Quantity: {{item.quantity}}</h4>
+            </div>
+        </div>
+        <h4 *ngIf="(pastItems$ | async).length === 0">No current orders found</h4>
+    </mat-expansion-panel>
+</mat-accordion>

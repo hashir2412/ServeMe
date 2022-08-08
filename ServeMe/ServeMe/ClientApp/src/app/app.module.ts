@@ -57,6 +57,8 @@ import { ChartModule } from 'primeng/chart';
 import { ServicesComponent } from './services/services.component';
 import { VendorStatsComponent } from './vendor-stats/vendor-stats.component';
 import { SearchComponent } from './search/search.component';
+import { VendorOrdersComponent } from './vendor-orders/vendor-orders.component';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -80,7 +82,8 @@ import { SearchComponent } from './search/search.component';
     BidsComponent,
     ServicesComponent,
     VendorStatsComponent,
-    SearchComponent
+    SearchComponent,
+    VendorOrdersComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -125,7 +128,8 @@ import { SearchComponent } from './search/search.component';
     MatSelectModule,
     ToastModule,
     MatToolbarModule,
-    ChartModule
+    ChartModule,
+    MatChipsModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true }, AppMemoryStoreService],
   bootstrap: [AppComponent]
