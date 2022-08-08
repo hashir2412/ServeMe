@@ -1,9 +1,27 @@
-<div fxLayout="row wrap" fxLayoutAlign="center center" class="m-5">
-    <div *ngFor="let service of services$ | async" style="margin-bottom: 15px !important; margin-right: 20px;">
+<div fxLayout="row wrap" fxLayoutAlign="center center" class="m-5" style="padding-bottom: 70px;">
+    <div *ngFor="let service of services$ | async" style="margin-bottom: 20px !important; margin-right: 20px;">
         <mat-card style="border-radius: 5px;">
             <mat-card-title>{{service.name}}</mat-card-title>
             <mat-card-content>
-                <!-- <img mat-card-image src="assets/images/2.jpg" style="width: 112%;"> -->
+                <img mat-card-image *ngIf="service.name === 'Appliances'" src="assets/images/1.jfif"
+                    style="width: 113.5%; padding-top: 15px;">
+                <img mat-card-image *ngIf="service.name === 'Electrical'" src="assets/images/2.jfif"
+                    style="width: 113.5%; padding-top: 15px;">
+                <img mat-card-image *ngIf="service.name === 'Plumbing'" src="assets/images/3.jfif"
+                    style="width: 113.5%; padding-top: 15px;">
+                <img mat-card-image *ngIf="service.name === 'Home Cleaning'" src="assets/images/4.jfif"
+                    style="width: 113.5%; padding-top: 15px;">
+                <img mat-card-image *ngIf="service.name === 'Tutoring'" src="assets/images/5.jfif"
+                    style="width: 113.5%; padding-top: 15px;">
+                <img mat-card-image *ngIf="service.name === 'Packaging and Moving'" src="assets/images/6.jfif"
+                    style="width: 113.5%; padding-top: 15px;">
+                <img mat-card-image *ngIf="service.name === 'Computer Repair'" src="assets/images/7.jfif"
+                    style="width: 113.5%; padding-top: 15px;">
+                <img mat-card-image *ngIf="service.name === 'Home Painting'" src="assets/images/8.jfif"
+                    style="width: 113.5%; padding-top: 15px;">
+                <img mat-card-image *ngIf="service.name === 'Pest Control'" src="assets/images/9.jfif"
+                    style="width: 113.5%; padding-top: 15px;">
+
             </mat-card-content>
             <mat-card-actions>
                 <button mat-button color="warn" (click)="onAddToCart(service)" *ngIf="service.quantity === 0">Add to
@@ -13,7 +31,7 @@
                         (click)="decreaseQuantity(service)">
                         <mat-icon>remove</mat-icon>
                     </button>
-                    <h4>{{service.quantity}}</h4>
+                    <span>{{service.quantity}}</span>
                     <button mat-icon-button aria-label="Example icon button with a vertical three dot icon"
                         (click)="service.quantity= service.quantity + 1">
                         <mat-icon>add</mat-icon>
