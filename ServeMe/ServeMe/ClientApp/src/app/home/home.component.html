@@ -1,5 +1,6 @@
 <!-- <button class="btn btn-primary" (click)="encryptUsingAES256()">Increment</button> -->
 <!-- <button class="btn btn-primary" (click)="generate()">Generate</button> -->
+<app-reviews-ratings></app-reviews-ratings>
 <app-services *ngIf="((user$ | async)!= null && (user$ | async).isCustomer) || (user$ | async) == null"></app-services>
 <app-vendor-stats *ngIf="((user$ | async)!= null && !(user$ | async).isCustomer)"></app-vendor-stats>
 <!-- <mat-card class="example-card" *ngFor="let service of services$ | async">

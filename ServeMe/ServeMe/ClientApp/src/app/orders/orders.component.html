@@ -96,8 +96,9 @@
                                     Total Items: {{order.items.length}}
                                 </mat-panel-title>
                                 <mat-panel-description>
-                                    {{order.total | currency}}
                                     {{order.date | date:'mediumDate'}}
+                                    Address:
+                                    {{order.addressLine1}},{{order.addressLine2}},{{order.state}},{{order.city}},{{order.pincode}}
                                 </mat-panel-description>
                             </mat-expansion-panel-header>
                             <div fxLayout="column" fxLayoutGap="10px">
