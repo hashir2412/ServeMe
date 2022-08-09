@@ -29,7 +29,7 @@ namespace ServeMe.Repository
             {
                 var reviewRatingDbModel = _mapper.Map<ReviewsRatingsDbModel>(value);
                 reviewRatingDbModel.Date = System.DateTime.Now;
-                var sql = "INSERT INTO ReviewsRatings (VendorId, CartID,UserID,Comment,Stars, Date) VALUES(@VendorId, @CartID,@UserID,@Comment,@Stars, @Date);SELECT CAST(SCOPE_IDENTITY() as int)";
+                var sql = "INSERT INTO ReviewsRatings (VendorId, CartID,UserID,Comment,Stars, Date) VALUES(@VendorID, @CartID,@UserID,@Comment,@Stars, @Date);SELECT CAST(SCOPE_IDENTITY() as int)";
                 var idOfNewRow = await connection.QueryFirstOrDefaultAsync<int>(sql, reviewRatingDbModel);
                 var paramter = new { idOfNewRow = idOfNewRow,CartID = value.CartId };
                 var sql2 = "Update Cart set ReviewRatingId=@idOfNewRow where CartId = @CartID;";

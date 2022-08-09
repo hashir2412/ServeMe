@@ -6,7 +6,7 @@ namespace ServeMe.Repository.Models
     {
         public int RatingID { get; set; }
 
-        public int ServiceID { get; set; }
+        public int VendorID { get; set; }
 
         public int CartID { get; set; }
 
