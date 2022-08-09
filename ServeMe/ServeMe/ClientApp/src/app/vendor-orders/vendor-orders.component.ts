@@ -18,6 +18,7 @@ export class VendorOrdersComponent implements OnInit {
 
   currentItems$: BehaviorSubject<CartResponseModel[]> = new BehaviorSubject<CartResponseModel[]>([]);
   pastItems$: BehaviorSubject<CartResponseModel[]> = new BehaviorSubject<CartResponseModel[]>([]);
+  cancelledItems$: BehaviorSubject<CartResponseModel[]> = new BehaviorSubject<CartResponseModel[]>([]);
   loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   constructor(private http: HttpClient, private store: AppMemoryStoreService, private service: MessageService) { }
 
@@ -36,6 +37,8 @@ export class VendorOrdersComponent implements OnInit {
           this.currentItems$.next(currentItems);
           const pastItems = res.body.filter(item => item.statusId === 4);
           this.pastItems$.next(pastItems);
+          const cancelledItems = res.body.filter(item => item.statusId === 3);
+          this.cancelledItems$.next(cancelledItems);
         } else {
           this.service.add({ severity: 'warn', detail: res.message });
         }

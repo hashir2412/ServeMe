@@ -19,5 +19,55 @@
             <app-vendor-orders></app-vendor-orders>
         </ng-template>
     </mat-tab>
+    <mat-tab label="Profile">
+        <ng-template matTabContent>
+            <div class="container pt-5">
+                <h1><b></b> Your Profile </h1>
+                <div fxLayout="column" fxLayoutGap="10px">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Name:</mat-label>
+                        <input matInput type="text" name="name" [(ngModel)]="model.name" #myname="ngModel" required>
+                        <mat-error *ngIf="myname.touched && myname.errors?.required">
+                            Name is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Address:</mat-label>
+                        <input matInput type="text" name="address" [(ngModel)]="model.address" #myname="ngModel"
+                            required>
+                        <mat-error *ngIf="myname.touched && myname.errors?.required">
+                            Address is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Enter your email</mat-label>
+                        <input matInput placeholder="pat@example.com" type="email" name="email"
+                            [(ngModel)]="model.email" #myEmail="ngModel"
+                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+                        <mat-error *ngIf="myEmail.touched">
+                            <span *ngIf="myEmail.errors?.required">Email is a required field</span>
+                            <span *ngIf="myEmail.errors?.pattern">This is not a valid Email</span>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Phone:</mat-label>
+                        <input matInput type="number" name="number" [(ngModel)]="model.phone" #mynumber="ngModel"
+                            required>
+                        <mat-error *ngIf="mynumber.touched && mynumber.errors?.required">
+                            Number is required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-checkbox color="primary" name="receiveUpdates" [(ngModel)]="model.receiveCommunication"
+                        labelPosition="before">
+                        Receive Email
+                    </mat-checkbox>
+                </div>
+                <div class="text-center">
+                    <button mat-raised-button color="primary">Modify</button>
+                </div>
+            </div>
+        </ng-template>
+    </mat-tab>
 
 </mat-tab-group>

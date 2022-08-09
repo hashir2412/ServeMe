@@ -19,12 +19,15 @@ import { UserModel } from 'src/app/registration-login/registration-login.model';
 export class VendorProfileComponent {
   loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   services$: BehaviorSubject<ServiceCategory[]> = new BehaviorSubject<ServiceCategory[]>([]);
-  
+  model: UserModel = new UserModel();
+
   constructor(private http: HttpClient, private store: AppMemoryStoreService, private dialog: MatDialog, private service: MessageService) {
 
   }
   ngOnInit(): void {
     this.getServices();
+    const user = this.store.get<UserModel>(Keys.User);
+    this.model = JSON.parse(JSON.stringify(user));
   }
 
   private getServices() {

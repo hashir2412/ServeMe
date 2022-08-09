@@ -47,8 +47,10 @@ namespace ServeMe.Domain
                     foreach (var bid in item.Bids)
                     {
                         var vendor = vendors.Body.FirstOrDefault(vdr => vdr.VendorId == bid.VendorId);
-                        bid.VendorName = vendor.Name;
-
+                        if (vendor != null)
+                        {
+                            bid.VendorName = vendor.Name;
+                        }
                     }
                 }
             }
@@ -74,7 +76,12 @@ namespace ServeMe.Domain
                     var userExist = await _userRepository.GetUserDetails(order.Email);
                     if (userExist.StatusCode != 0 && userExist.Message == "User not found")
                     {
-                        var user = await _userRepository.Register(new UserDto() { Email = order.Email, Phone = order.Phone });
+                        var user = await _userRepository.Register(new UserDto()
+                        {
+                            Email = order.Email,
+                            Phone = order.Phone,
+                            Name = order.Name
+                        });
                         if (user.StatusCode != 0)
                         {
                             return new ResponseBaseModel<int>() { Body = 1, Message = "Error placing order", StatusCode = 1 };

@@ -228,7 +228,7 @@ namespace ServeMe.Repository
                     var AverageField3 = result2.Where(g => g.VendorID == i.VendorID)
                       .Average(g => (int?)g.Stars)
                       .GetValueOrDefault();
-                    var rating = new VendorReviewRatingDto() { Address = i.Address, Stars = AverageField3, Name = i.Address, VendorId = i.VendorID };
+                    var rating = new VendorReviewRatingDto() { Address = i.Address, Stars = AverageField3, Name = i.VendorName, VendorId = i.VendorID };
                     final.Add(rating);
                 }
                 return new ResponseBaseModel<IEnumerable<VendorReviewRatingDto>>() { Body = final, Message = "Get Details successfully", StatusCode = 0 };
