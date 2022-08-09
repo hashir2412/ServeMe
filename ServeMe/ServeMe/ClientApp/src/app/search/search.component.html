@@ -1,35 +1,40 @@
 <app-loading [show$]="loading$"></app-loading>
-<div fxLayout="column" fxLayoutGap="10px">
-    <div fxLayout="row" class="pt-4">
-        <mat-form-field appearance="fill">
-            <mat-label>Option</mat-label>
-            <mat-select [(ngModel)]="searchType" (selectionChange)="performSearch()">
-                <mat-option [value]="type.StarRating">Star Rating</mat-option>
-                <mat-option [value]="type.Address">Address</mat-option>
-                <mat-option [value]="type.Name">Name</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field style="width: 80%;">
-            <mat-label>Search Service Provider</mat-label>
-            <input matInput [(ngModel)]="searchText">
-            <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
-        <button mat-raised-button color="primary" (click)="performSearch()">Search</button>
+<div class="container">
+    <div fxLayout="column" fxLayoutGap="20px">
+        <div class="text-center">
+            <div fxLayout="row" fxLayoutGap="25px">
+                <mat-form-field appearance="fill" class="pt-4">
+                    <mat-label>Option</mat-label>
+                    <mat-select [(ngModel)]="searchType" (selectionChange)="performSearch()">
+                        <mat-option [value]="type.StarRating">Star Rating</mat-option>
+                        <mat-option [value]="type.Address">Address</mat-option>
+                        <mat-option [value]="type.Name">Name</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field style="width: 80%; cursor: pointer; padding-top: 35px;">
+                    <mat-label>Search Service Provider</mat-label>
+                    <input matInput [(ngModel)]="searchText">
+                    <mat-icon matSuffix (click)="performSearch()">search</mat-icon>
+                </mat-form-field>
+                
+            </div>
+        </div>
+        <p-table [value]="vendors$ | async" *ngIf="(vendors$ | async).length > 0">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Stars</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr>
+                    <td>{{rowData.name}}</td>
+                    <td>{{rowData.address}}</td>
+                    <td>{{rowData.stars}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <h4 *ngIf="(vendors$ | async).length === 0">No Results match your criteria.</h4>
     </div>
-    <p-table [value]="vendors$ | async" *ngIf="(vendors$ | async).length > 0">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Stars</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-rowData let-columns="columns">
-            <tr>
-                <td>{{rowData.name}}</td>
-                <td>{{rowData.address}}</td>
-                <td>{{rowData.stars}}</td>
-            </tr>
-        </ng-template>
-    </p-table>
 </div>
