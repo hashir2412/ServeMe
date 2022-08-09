@@ -8,23 +8,22 @@
       </button>
       <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" style="cursor: pointer;" [ngClass]="{ show: isExpanded }">
         <ul class="navbar-nav flex-grow">
-          <li class="nav-item pt-2" [routerLink]="['/searchvendor']"
+          <li class="nav-item pt-3" [routerLink]="['/searchvendor']"
             style="margin-right: 10px; font-weight: 400;"
             *ngIf="((user$ | async)!= null && (user$ | async).isCustomer) || (user$ | async) == null">
             <mat-icon>search</mat-icon>
           </li>
-          <li class="nav-item pt-2" [routerLinkActive]="['link-active']">
+          <li class="nav-item pt-3" [routerLinkActive]="['link-active']">
             <span class="text-dark" [routerLink]="['/']"
               style="margin-top: 4px; margin-right: 10px; font-weight: 400;">Home</span>
-
           </li>
-          <li class="nav-item pt-2" [routerLinkActive]="['link-active']">
+          <li class="nav-item pt-3" [routerLinkActive]="['link-active']">
             <span *ngIf="((user$ | async)!= null && (user$ | async).isCustomer) || (user$ | async) == null"
               [routerLink]="['/cart']" style="margin-top: 4px; margin-right: 10px; font-weight: 400;">View Cart</span>
           </li>
           <li class="nav-item pt-2">
             <span *ngIf="(user$ | async) == null" (click)="openDialog()"
-              style="margin-top: 3px; margin-right: 10px; font-weight: 400;">Register/Login</span>
+              style="margin-top: 4px; margin-right: 10px; font-weight: 400;">Register/Login</span>
             <button [matMenuTriggerFor]="menu" mat-icon-button class="example-icon"
               aria-label="Example icon-button with share icon" *ngIf="(user$ | async) != null">
               <mat-icon>person</mat-icon>

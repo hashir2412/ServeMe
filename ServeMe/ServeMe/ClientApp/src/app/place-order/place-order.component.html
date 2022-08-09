@@ -1,5 +1,5 @@
 <ng-container *ngIf="!showAddress">
-    <div fxLayout="column" *ngIf="(items$ | async)!= null && (items$ | async).length > 0">
+    <div fxLayout="column" class="ml-5 mr-5 mb-5 pt-3" *ngIf="(items$ | async)!= null && (items$ | async).length > 0">
         <div fxLayout="row" fxLayoutAlign="space-between none" *ngFor="let service of items$ | async">
             <h4>{{service.name}}</h4>
             <div fxLayout="row" *ngIf="service.quantity > 0">
@@ -13,10 +13,9 @@
                     <mat-icon>add</mat-icon>
                 </button>
             </div>
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="fill" class="">
                 <mat-label>Choose a date</mat-label>
                 <input matInput type="datetime-local" required min="2022-08-10T00:00:00" [(ngModel)]="service.date">
-                <mat-hint>MM/DD/YYYY</mat-hint>
             </mat-form-field>
         </div>
         <!-- <mat-card class="example-card" *ngFor="let service of items$ | async">
@@ -46,7 +45,10 @@
             </mat-card-actions>
         </mat-card> -->
         <app-message [messages$]="messages$"></app-message>
-        <button mat-raised-button type="submit" color="primary" (click)="showAddress=true">Go to Checkout</button>
+        <div class="text-center pt-4">
+            <button style="width: 50%;" mat-raised-button type="submit" color="primary"
+                (click)="showAddress=true">Go to Checkout</button>
+        </div>
     </div>
     <ng-container *ngIf="(items$ | async)!= null && (items$ | async).length === 0">
         <h4>Cart is currently empty</h4>

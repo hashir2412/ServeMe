@@ -51,7 +51,7 @@
                                                     {{j+1}}. Vendor Name: {{bid.vendorName}}
                                                 </h4>
                                                 <h4>Amount: {{bid.amount | currency}}</h4>
-                                                <button mat-raised-button *ngIf="item.statusId === 1" color="primary"
+                                                <button style="float: right;" mat-raised-button *ngIf="item.statusId === 1" color="primary"
                                                     (click)="onConfirmBid(bid)">Confirm Bid</button>
                                                 <mat-chip-list aria-label="Fish selection" *ngIf="item.vendorId === bid.vendorId">
                                                     <mat-chip color="accent" selected>Confirmed Vendor</mat-chip>
