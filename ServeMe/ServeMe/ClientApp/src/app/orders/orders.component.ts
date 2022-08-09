@@ -11,6 +11,7 @@ import { ApiUrl } from '../constants/api-url.enum';
 import { Keys } from '../constants/keys.enum';
 import { ModifyOrderComponent } from '../modify-order/modify-order.component';
 import { UserModel } from '../registration-login/registration-login.model';
+import { ReviewRatingModel, ReviewsRatingsComponent } from '../reviews-ratings/reviews-ratings.component';
 
 @Component({
   selector: 'app-orders',
@@ -52,20 +53,6 @@ export class OrdersComponent implements OnInit {
 
   }
 
-  onPlaceReview() {
-    this.loading$.next(true);
-    const res: ReviewRequestModel = {
-      comment: 'good',
-      cartId: 4,
-      serviceId: 2,
-      stars: 3,
-      userId: 2
-    }
-    this.http.post(ApiUrl.Review, res).subscribe(res => {
-      this.loading$.next(false);
-      console.log(res);
-    });
-  }
 
   onCancel(item: CartResponseModel) {
     const dialogRef = this.dialog.open(ConfirmComponent, {
@@ -124,10 +111,33 @@ export class OrdersComponent implements OnInit {
   isCancelModifyAllowed(item: CartResponseModel) {
     return (item.statusId === 1 || item.statusId === 2);
   }
+
+  onSubmitReview(item: CartResponseModel) {
+    const dialogRef = this.dialog.open(ReviewsRatingsComponent, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe((result: ReviewRatingModel) => {
+      if (result) {
+        this.loading$.next(true);
+        const userId = this.store.get<UserModel>(Keys.User)?.userID != null ? this.store.get<UserModel>(Keys.User)?.userID : 0;
+        const request: ReviewRequestModel = { cartId: item.cartId, comment: result.comment, vendorId: item.vendorId, stars: result.stars, userId: userId };
+        this.http.post<BaseResponseModel<number>>(`${ApiUrl.User}review`, request).subscribe(res => {
+          this.loading$.next(false);
+          if (res.statusCode === 0) {
+            this.messageService.add({ severity: 'success', detail: res.message });
+            this.getOrders();
+          } else {
+            this.messageService.add({ severity: 'warn', detail: res.message });
+          }
+        });
+      }
+    });
+  }
 }
 
 class ReviewRequestModel {
-  serviceId: number;
+  vendorId: number;
   cartId: number;
   userId: number;
   comment: string;
@@ -160,6 +170,7 @@ class CartResponseModel {
   serviceCategory: ServiceCategory;
   bids: BidResponseModel;
   vendorId: number;
+  reviewRatingId: number;
 }
 
 class BidResponseModel {

@@ -20,3 +20,8 @@ export class ReviewsRatingsComponent implements OnInit {
   }
 
 }
+
+export class ReviewRatingModel {
+  stars: number;
+  comment: string;
+}

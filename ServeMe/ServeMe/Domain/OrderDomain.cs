@@ -47,7 +47,11 @@ namespace ServeMe.Domain
                     foreach (var bid in item.Bids)
                     {
                         var vendor = vendors.Body.FirstOrDefault(vdr => vdr.VendorId == bid.VendorId);
-                        bid.VendorName = vendor.Name;
+                        if (vendor != null)
+                        {
+                            bid.VendorName = vendor.Name;
+                        }
+
                     }
                 }
             }

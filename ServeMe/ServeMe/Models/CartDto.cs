@@ -33,6 +33,10 @@ namespace ServeMe.Models
         public string Phone { get; set; }
 
         public string Name { get; set; }
+
+        public int ReviewRatingId { get; set; }
+
+
         //public int CartId { get; set; }
         //public string Name { get; set; }
 
