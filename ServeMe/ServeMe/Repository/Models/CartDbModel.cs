@@ -34,6 +34,7 @@ namespace ServeMe.Repository.Models
 
         public OrderDbModel Order { get; set; }
 
+        public int ReviewRatingId { get; set; }
         //public StatusDbModel Status { get; set; }
 
         public ServiceCategoryDbModel ServiceCategory { get; set; }

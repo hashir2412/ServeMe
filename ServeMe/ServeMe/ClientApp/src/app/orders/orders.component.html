@@ -53,7 +53,8 @@
                                                 <h4>Amount: {{bid.amount | currency}}</h4>
                                                 <button style="float: right;" mat-raised-button *ngIf="item.statusId === 1" color="primary"
                                                     (click)="onConfirmBid(bid)">Confirm Bid</button>
-                                                <mat-chip-list aria-label="Fish selection" *ngIf="item.vendorId === bid.vendorId">
+                                                <mat-chip-list aria-label="Fish selection"
+                                                    *ngIf="item.vendorId === bid.vendorId">
                                                     <mat-chip color="accent" selected>Confirmed Vendor</mat-chip>
                                                 </mat-chip-list>
                                             </div>
@@ -107,6 +108,8 @@
                                     <h4>{{item.date | date:'medium'}}</h4>
                                     <h4>Cost: {{item.rate | currency}}</h4>
                                     <h4>Quantity: {{item.quantity}}</h4>
+                                    <button mat-raised-button *ngIf="item.reviewRatingId === 0" color="primary"
+                                        (click)="onSubmitReview(item)">Provide Feedback</button>
                                 </div>
                             </div>
                         </mat-expansion-panel>

@@ -2,7 +2,7 @@
 {
     public class ReviewsRatingsRequestModel
     {
-        public int ServiceId { get; set; }
+        public int VendorId { get; set; }
 
         public int CartId { get; set; }
 

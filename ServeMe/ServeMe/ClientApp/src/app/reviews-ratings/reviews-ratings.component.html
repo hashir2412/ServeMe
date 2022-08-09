@@ -1,15 +1,23 @@
-<div fxLayout="column">
-    <div class="row">
-        <div class="col-sm-12">
-            <ul class="list-inline rating-list" *ngFor="let star of stars" style="display: inline-block">
-                <li (click)="countStar(star)" [ngClass]="{'selected': (star <= selectedValue)}">
-                    <mat-icon>star</mat-icon>
-                </li>
-            </ul>
+<h1 mat-dialog-title>Feedback</h1>
+<mat-dialog-content>
+    <div fxLayout="column">
+        <div class="row">
+            <div class="col-sm-12">
+                
+                <ul class="list-inline rating-list" *ngFor="let star of stars" style="display: inline-block">
+                    <li (click)="countStar(star)" [ngClass]="{'selected': (star <= selectedValue)}">
+                        <mat-icon>star</mat-icon>
+                    </li>
+                </ul>
+            </div>
         </div>
+        <mat-form-field class="example-form-field" appearance="fill">
+            <mat-label>Comment</mat-label>
+            <input matInput type="text" [(ngModel)]="comment">
+        </mat-form-field>
     </div>
-    <mat-form-field class="example-form-field" appearance="fill">
-        <mat-label>Comment</mat-label>
-        <input matInput type="text" [(ngModel)]="comment">
-    </mat-form-field>
-</div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button (click)="onSubmit()" cdkFocusInitial>Submit</button>
+</mat-dialog-actions>

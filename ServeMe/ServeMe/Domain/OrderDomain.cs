@@ -48,6 +48,7 @@ namespace ServeMe.Domain
                     {
                         var vendor = vendors.Body.FirstOrDefault(vdr => vdr.VendorId == bid.VendorId);
                         bid.VendorName = vendor.Name;
+
                     }
                 }
             }
