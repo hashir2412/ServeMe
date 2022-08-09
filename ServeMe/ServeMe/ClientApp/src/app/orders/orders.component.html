@@ -1,8 +1,8 @@
 <app-loading [show$]="loading$"></app-loading>
 <app-message [messages$]="messages$"></app-message>
 
-<div fxLayout="column" fxLayoutGap="10px">
-    <div fxLayout="column" fxLayoutGap="10px">
+<div fxLayout="column" fxLayoutGap="20px">
+    <div fxLayout="column" fxLayoutGap="15px" class="ml-5 mr-5 mt-3">
         <mat-accordion class="example-headers-align" multi>
             <mat-expansion-panel expanded="true">
                 <mat-expansion-panel-header>
@@ -28,12 +28,12 @@
                             <div fxLayout="column" fxLayoutGap="10px">
                                 <mat-accordion class="example-headers-align" multi>
                                     <mat-expansion-panel *ngFor="let item of order.items;index as i">
-                                        <mat-expansion-panel-header>
+                                        <mat-expansion-panel-header style="padding-top: 30px; padding-bottom: 30px;">
                                             <mat-panel-title>
                                                 <h4>{{i+1}}. {{item.serviceCategory.name}}</h4>
                                             </mat-panel-title>
                                             <mat-panel-description>
-                                                <div fxLayout="row" fxLayoutGap="10px">
+                                                <div fxLayout="row" fxLayoutGap="20px">
                                                     <h4>{{item.date | date:'medium'}}</h4>
                                                     <h4>Cost: {{item.rate | currency}}</h4>
                                                     <h4>Quantity: {{item.quantity}}</h4>
@@ -50,9 +50,15 @@
                                                 <h4>
                                                     {{j+1}}. Vendor Name: {{bid.vendorName}}
                                                 </h4>
-                                                <h4>Amount: {{bid.amount | currency}}</h4>
-                                                <button style="float: right;" mat-raised-button *ngIf="item.statusId === 1" color="primary"
-                                                    (click)="onConfirmBid(bid)">Confirm Bid</button>
+                                                <mat-panel-description>
+                                                    <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between none" class="m-2">
+                                                        <h4>Amount: {{bid.amount | currency}}</h4>
+                                                        <div class="text-right"></div>
+                                                        <button class="float-right" mat-raised-button
+                                                            *ngIf="item.statusId === 1" color="primary"
+                                                            (click)="onConfirmBid(bid)">Confirm Bid</button>
+                                                    </div>
+                                                </mat-panel-description>
                                                 <mat-chip-list aria-label="Fish selection"
                                                     *ngIf="item.vendorId === bid.vendorId">
                                                     <mat-chip color="accent" selected>Confirmed Vendor</mat-chip>
