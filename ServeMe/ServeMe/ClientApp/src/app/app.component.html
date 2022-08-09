@@ -1,7 +1,11 @@
-<body>
+<body class="d-flex flex-column min-vh-100">
   <app-nav-menu></app-nav-menu>
-  <div class="container-fluid" style="margin: 10px;">
+  <div class="container-fluid">
     <router-outlet></router-outlet>
   </div>
   <p-toast position="bottom-right" sticky="false"></p-toast>
+  <footer class="bg-dark text-center text-white pt-3 pb-2 mt-auto">
+    © 2022 Copyright:
+    <a class="text-white text-center" href="https://servemesystem.azurewebsites.net/">Servemesystem.com</a>
+  </footer>
 </body>

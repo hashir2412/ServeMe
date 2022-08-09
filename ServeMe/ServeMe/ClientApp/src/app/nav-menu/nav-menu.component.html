@@ -6,7 +6,7 @@
         aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]="{ show: isExpanded }">
+      <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" style="cursor: pointer;" [ngClass]="{ show: isExpanded }">
         <ul class="navbar-nav flex-grow">
           <li class="nav-item pt-2" [routerLink]="['/searchvendor']"
             style="margin-right: 10px; font-weight: 400;"
@@ -22,7 +22,7 @@
             <span *ngIf="((user$ | async)!= null && (user$ | async).isCustomer) || (user$ | async) == null"
               [routerLink]="['/cart']" style="margin-top: 4px; margin-right: 10px; font-weight: 400;">View Cart</span>
           </li>
-          <li>
+          <li class="nav-item pt-2">
             <span *ngIf="(user$ | async) == null" (click)="openDialog()"
               style="margin-top: 3px; margin-right: 10px; font-weight: 400;">Register/Login</span>
             <button [matMenuTriggerFor]="menu" mat-icon-button class="example-icon"

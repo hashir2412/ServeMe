@@ -1,11 +1,12 @@
 <app-loading [show$]="loading$"></app-loading>
-<div fxLayout="column">
-    <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Search Service Provider</mat-label>
-        <input matInput>
-        <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
-    <mat-radio-group color="primary" name="userType" aria-labelledby="example-radio-group-label"
+<div fxLayout="row" class="pt-4">
+    <button mat-button [matMenuTriggerFor]="menu" class="m-3" style="background-color:darkgray;">Search</button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item>Star Rating</button>
+        <button mat-menu-item>Address</button>
+        <button mat-menu-item>Name</button>
+    </mat-menu>
+    <!-- <mat-radio-group color="primary" name="userType" aria-labelledby="example-radio-group-label"
         class="example-radio-group" [(ngModel)]="searchType">
         <mat-radio-button class="example-radio-button" style="margin-right: 10px;" [value]="type.StarRating">
             Star Rating
@@ -16,5 +17,10 @@
         <mat-radio-button class="example-radio-button" [value]="type.Name">
             Name
         </mat-radio-button>
-    </mat-radio-group>
+    </mat-radio-group> -->
+    <mat-form-field style="width: 80%;">
+        <mat-label>Search Service Provider</mat-label>
+        <input matInput>
+        <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
 </div>
