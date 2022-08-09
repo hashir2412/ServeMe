@@ -21,7 +21,7 @@
             <span *ngIf="((user$ | async)!= null && (user$ | async).isCustomer) || (user$ | async) == null"
               [routerLink]="['/cart']" style="margin-top: 4px; margin-right: 10px; font-weight: 400;">View Cart</span>
           </li>
-          <li class="nav-item pt-2">
+          <li class="nav-item" [ngClass]="{'pt-2': (user$ | async) != null, 'pt-3': (user$ | async) == null}">
             <span *ngIf="(user$ | async) == null" (click)="openDialog()"
               style="margin-top: 4px; margin-right: 10px; font-weight: 400;">Register/Login</span>
             <button [matMenuTriggerFor]="menu" mat-icon-button class="example-icon"
