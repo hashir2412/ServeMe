@@ -1,0 +1,40 @@
+<h1 mat-dialog-title>Choose Payment method</h1>
+<mat-dialog-content>
+    <div role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="p-4">
+                    <mat-radio-group color="primary" [(ngModel)]="userType" fxLayout="column" fxLayoutGap="3px"
+                        aria-label="Select an option">
+                        <mat-radio-button [value]="type.Vendor">COD</mat-radio-button>
+                        <mat-radio-button [value]="type.Customer">Online (Debit/Credit)</mat-radio-button>
+                    </mat-radio-group>
+                    <div class="container p-5" *ngIf="userType === type.Customer">
+                        <div fxLayout="column" fxLayoutGap="3px">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Account Number:</mat-label>
+                                <input matInput placeholder="Account Number" [(ngModel)]="accountNumber" required>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Expiry:</mat-label>
+                                <input matInput placeholder="Expiry Date" [(ngModel)]="expiryDate" required>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <mat-label>CVV:</mat-label>
+                                <input matInput placeholder="CVV" [(ngModel)]="cvv" required>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Account Holder:</mat-label>
+                                <input matInput placeholder="Account Holder" [(ngModel)]="accountHolder" required>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button (click)="onConfirm()" cdkFocusInitial>Confirm</button>
+</mat-dialog-actions>

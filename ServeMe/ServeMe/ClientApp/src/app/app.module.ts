@@ -60,6 +60,7 @@ import { SearchComponent } from './search/search.component';
 import { VendorOrdersComponent } from './vendor-orders/vendor-orders.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { ReviewsRatingsComponent } from './reviews-ratings/reviews-ratings.component';
+import { PaymentComponent } from './payment/payment.component';
 
 @NgModule({
   declarations: [
@@ -85,7 +86,8 @@ import { ReviewsRatingsComponent } from './reviews-ratings/reviews-ratings.compo
     VendorStatsComponent,
     SearchComponent,
     VendorOrdersComponent,
-    ReviewsRatingsComponent
+    ReviewsRatingsComponent,
+    PaymentComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

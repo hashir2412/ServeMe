@@ -10,6 +10,7 @@ import { ConfirmComponent } from '../confirm/confirm.component';
 import { ApiUrl } from '../constants/api-url.enum';
 import { Keys } from '../constants/keys.enum';
 import { ModifyOrderComponent } from '../modify-order/modify-order.component';
+import { PaymentComponent } from '../payment/payment.component';
 import { UserModel } from '../registration-login/registration-login.model';
 import { ReviewRatingModel, ReviewsRatingsComponent } from '../reviews-ratings/reviews-ratings.component';
 
@@ -88,7 +89,7 @@ export class OrdersComponent implements OnInit {
   }
 
   onConfirmBid(bid: BidResponseModel) {
-    const dialogRef = this.dialog.open(ConfirmComponent, {
+    const dialogRef = this.dialog.open(PaymentComponent, {
       width: '400px'
     });
 

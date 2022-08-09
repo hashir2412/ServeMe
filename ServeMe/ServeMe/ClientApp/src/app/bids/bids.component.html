@@ -16,7 +16,7 @@
             <td>{{rowData.name}}</td>
             <td>{{rowData.serviceCategory.name}}</td>
             <td>{{rowData.quantity}}</td>
-            <td>{{rowData.date}}</td>
+            <td>{{rowData.date | date:'mediumDate'}}</td>
             <td>{{rowData.address}}</td>
             <td pEditableColumn>
                 <p-cellEditor>

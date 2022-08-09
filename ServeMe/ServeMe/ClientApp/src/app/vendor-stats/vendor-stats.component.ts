@@ -46,6 +46,7 @@ export class VendorStatsComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    
   }
 
 }

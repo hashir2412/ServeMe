@@ -176,30 +176,22 @@ namespace ServeMe.Repository
                 //var salesCartGroupedList = SalesCartList.GroupBy(u => u.Order.OrderID)
                 //                      .Select(grp => new { Id = grp.Key, Items = grp.ToList() })
                 //                      .ToList();
-                //foreach (var i in salesCartGroupedList)
-                //{
-                //    var cart = SalesCartList.FirstOrDefault(res => res.Order.OrderID == i.Id);
-                //    OrderDto finalCart = new OrderDto();
-                //    finalCart.Id = i.Id;
-                //    finalCart.Items = new List<CartDto>();
-                //    i.Items.ForEach(item =>
-                //    {
-                //        finalCart.Items.Add(_mapper.Map<CartDto>(item));
-                //    });
-                //    finalCart.AddressLine1 = cart.Order.AddressLine1;
-                //    finalCart.AddressLine2 = cart.Order.AddressLine2;
-                //    finalCart.State = cart.Order.State;
-                //    finalCart.City = cart.Order.City;
-                //    finalCart.Pincode = cart.Order.Pincode;
-                //    finalCart.Date = cart.Order.Date;
-                //    finalCart.Total = cart.Order.Total;
-                //    finalCart.Name = cart.Order.Name;
-                //    finalCart.Phone = cart.Order.Phone;
-                //    result.Add(finalCart);
-                //}
+                var finalCart = new List<CartDto>();
+                foreach (var i in SalesCartList)
+                {
+                    var cartDto = new CartDto();
+                    var cartFound = finalCart.FirstOrDefault(crt => crt.CartId == i.CartID);
+                    if (cartFound != null)
+                    {
+                        cartFound.Bids.AddRange(_mapper.Map<IEnumerable<BidDto>>(i.Bids));
+                    }
+                    else
+                    {
+                        finalCart.Add(_mapper.Map<CartDto>(i));
+                    }
+                }
 
-                var result = _mapper.Map<IEnumerable<CartDto>>(SalesCartList);
-                return new ResponseBaseModel<IEnumerable<CartDto>>() { Body = result, Message = "Success", StatusCode = 0 };
+                return new ResponseBaseModel<IEnumerable<CartDto>>() { Body = finalCart, Message = "Success", StatusCode = 0 };
             }
         }
 
