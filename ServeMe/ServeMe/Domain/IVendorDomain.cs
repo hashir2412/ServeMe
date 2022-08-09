@@ -20,6 +20,8 @@ namespace ServeMe.Domain
 
         Task<ResponseBaseModel<int>> MarkOrderComplete(CartDto cartDto);
 
+        Task<ResponseBaseModel<IEnumerable<VendorReviewRatingDto>>> GetVendorReviewRatingsDetails();
+
 
     }
 }

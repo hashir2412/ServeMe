@@ -214,6 +214,27 @@ namespace ServeMe.Repository
             }
         }
 
+        public async Task<ResponseBaseModel<IEnumerable<VendorReviewRatingDto>>> GetVendorReviewRatingsDetails()
+        {
+            using (var connection = new SqlConnection(_appSettings.DatabaseConnection))
+            {
+                var getBid = "select * from Vendors";
+                var result = await connection.QueryAsync<VendorDbModel>(getBid);
+                var getBid2 = "select * from ReviewsRatings";
+                var result2 = await connection.QueryAsync<ReviewsRatingsDbModel>(getBid2);
+                List<VendorReviewRatingDto> final = new List<VendorReviewRatingDto>();
+                foreach (var i in result)
+                {
+                    var AverageField3 = result2.Where(g => g.VendorID == i.VendorID)
+                      .Average(g => (int?)g.Stars)
+                      .GetValueOrDefault();
+                    var rating = new VendorReviewRatingDto() { Address = i.Address, Stars = AverageField3, Name = i.Address, VendorId = i.VendorID };
+                    final.Add(rating);
+                }
+                return new ResponseBaseModel<IEnumerable<VendorReviewRatingDto>>() { Body = final, Message = "Get Details successfully", StatusCode = 0 };
+            }
+        }
+
 
     }
 }

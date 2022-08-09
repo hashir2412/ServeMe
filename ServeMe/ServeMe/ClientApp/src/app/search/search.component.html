@@ -1,26 +1,35 @@
 <app-loading [show$]="loading$"></app-loading>
-<div fxLayout="row" class="pt-4">
-    <button mat-button [matMenuTriggerFor]="menu" class="m-3" style="background-color:darkgray;">Search</button>
-    <mat-menu #menu="matMenu">
-        <button mat-menu-item>Star Rating</button>
-        <button mat-menu-item>Address</button>
-        <button mat-menu-item>Name</button>
-    </mat-menu>
-    <!-- <mat-radio-group color="primary" name="userType" aria-labelledby="example-radio-group-label"
-        class="example-radio-group" [(ngModel)]="searchType">
-        <mat-radio-button class="example-radio-button" style="margin-right: 10px;" [value]="type.StarRating">
-            Star Rating
-        </mat-radio-button>
-        <mat-radio-button class="example-radio-button" [value]="type.Address">
-            Address
-        </mat-radio-button>
-        <mat-radio-button class="example-radio-button" [value]="type.Name">
-            Name
-        </mat-radio-button>
-    </mat-radio-group> -->
-    <mat-form-field style="width: 80%;">
-        <mat-label>Search Service Provider</mat-label>
-        <input matInput>
-        <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
+<div fxLayout="column" fxLayoutGap="10px">
+    <div fxLayout="row" class="pt-4">
+        <mat-form-field appearance="fill">
+            <mat-label>Option</mat-label>
+            <mat-select [(ngModel)]="searchType" (selectionChange)="performSearch()">
+                <mat-option [value]="type.StarRating">Star Rating</mat-option>
+                <mat-option [value]="type.Address">Address</mat-option>
+                <mat-option [value]="type.Name">Name</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field style="width: 80%;">
+            <mat-label>Search Service Provider</mat-label>
+            <input matInput [(ngModel)]="searchText">
+            <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="performSearch()">Search</button>
+    </div>
+    <p-table [value]="vendors$ | async" *ngIf="(vendors$ | async).length > 0">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Stars</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td>{{rowData.name}}</td>
+                <td>{{rowData.address}}</td>
+                <td>{{rowData.stars}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>

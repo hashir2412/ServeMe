@@ -68,5 +68,10 @@ namespace ServeMe.Domain
         {
             return await _orderRepository.MarkOrderComplete(cartDto);
         }
+
+        public async Task<ResponseBaseModel<IEnumerable<VendorReviewRatingDto>>> GetVendorReviewRatingsDetails()
+        {
+            return await _vendorRepository.GetVendorReviewRatingsDetails();
+        }
     }
 }

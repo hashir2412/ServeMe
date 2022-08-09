@@ -22,9 +22,9 @@ namespace ServeMe.Controllers
         }
         // GET: api/<VendorController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ResponseBaseModel<IEnumerable<VendorReviewRatingDto>>> GetAsync()
         {
-            return new string[] { "value1", "value2" };
+            return await _vendorDomain.GetVendorReviewRatingsDetails();
         }
 
         [HttpGet("{id}")]

@@ -20,5 +20,7 @@ namespace ServeMe.Repository
 
         Task<ResponseBaseModel<IEnumerable<CartDto>>> GetActiveBidsByVendor(int id);
 
+        Task<ResponseBaseModel<IEnumerable<VendorReviewRatingDto>>> GetVendorReviewRatingsDetails();
+
     }
 }
