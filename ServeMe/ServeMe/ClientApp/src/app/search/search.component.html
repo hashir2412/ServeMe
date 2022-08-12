@@ -13,7 +13,7 @@
                 </mat-form-field>
                 <mat-form-field style="width: 80%; cursor: pointer; padding-top: 35px;">
                     <mat-label>Search Service Provider</mat-label>
-                    <input matInput [(ngModel)]="searchText">
+                    <input (keyup.enter)="performSearch()" matInput [(ngModel)]="searchText">
                     <mat-icon matSuffix (click)="performSearch()">search</mat-icon>
                 </mat-form-field>
                 

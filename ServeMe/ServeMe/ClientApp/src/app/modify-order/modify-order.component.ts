@@ -17,11 +17,25 @@ export class ModifyOrderComponent implements OnInit {
 
   messages$: Subject<Message> = new Subject<Message>();
   loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  todayDate: string;
+  showCancelModify = false;
+
   constructor(public dialogRef: MatDialogRef<ModifyOrderComponent>, private http: HttpClient, @Inject(MAT_DIALOG_DATA) public data: { date: Date, cartId: number }) { }
 
-  ngOnInit(): void {
+  private formatDate(nmbr: number): string {
+    let date = nmbr + "";
+    date = (date.length < 2) ? "0" + date : date;
+    return date;
   }
-  
+
+  ngOnInit(): void {
+    const month = this.formatDate(new Date().getMonth() + 1);
+    const day = this.formatDate(new Date().getDate() + 1);
+    const hours = this.formatDate(new Date().getHours() + 1);
+    const minutes = this.formatDate(new Date().getMinutes() + 1);
+    this.todayDate = new Date().getFullYear() + "-" + month + "-" + day + 'T' + hours + ':' + minutes;
+  }
+
   onModify() {
     this.loading$.next(true);
     const res = { cartId: this.data.cartId, dateTime: new Date(this.data.date) };

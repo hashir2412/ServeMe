@@ -110,7 +110,14 @@ export class OrdersComponent implements OnInit {
   }
 
   isCancelModifyAllowed(item: CartResponseModel) {
-    return (item.statusId === 1 || item.statusId === 2);
+    if (item.date) {
+      const time = new Date(item.date);
+      const diff = time.getTime() - new Date().getTime();
+      const days = Math.floor(diff / (60 * 60 * 24 * 1000));
+      const hours = Math.floor(diff / (60 * 60 * 1000)) - (days * 24);
+      return (item.statusId === 1 || item.statusId === 2) && (days >= 1 || hours >= 24);
+    }
+    return item.statusId === 1 || item.statusId === 2;
   }
 
   onSubmitReview(item: CartResponseModel) {

@@ -30,10 +30,20 @@ export class PlaceOrderComponent implements OnInit {
   cart: ServiceCategory[] = [];
   model: PlaceOrderRequestModel = new PlaceOrderRequestModel();
   tomorrowDate: Date = new Date((new Date()).getDate() + 1);
+  todayDate = new Date().toDateString();
   constructor(private store: AppMemoryStoreService, private _formBuilder: FormBuilder, private http: HttpClient, private service: MessageService,
     private router: Router) { }
 
+  private formatDate(nmbr: number): string {
+    var date = nmbr + "";
+    date = (date.length < 2) ? "0" + date : date;
+    return date;
+  }
+
   ngOnInit(): void {
+    var month = this.formatDate(new Date().getMonth() + 1);
+    var day = this.formatDate(new Date().getDate() + 1);
+    this.todayDate = new Date().getFullYear() + "-" + month + "-" + day + "T00:00";
     const items = this.store.observe<ServiceCategory[]>(Keys.Cart);
     if (items) {
       this.items$ = items;

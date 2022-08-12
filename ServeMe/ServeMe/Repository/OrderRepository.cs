@@ -133,7 +133,7 @@ namespace ServeMe.Repository
             {
                 var parameters = new { cartId = cartId, dateTime = dateTime.ToString("yyyy-MM-ddTHH:mm:ss") };
                 var sql = "Update Cart SET Date = @dateTime where CartID = @cartId";
-                var idOfNewRow = await connection.QueryFirstOrDefaultAsync<int>(sql, parameters);
+                var idOfNewRow = await connection.ExecuteAsync(sql, parameters);
                 return idOfNewRow == 1 ? new ResponseBaseModel<int>() { Body = idOfNewRow, Message = "Successfully Modified the order", StatusCode = 0 } :
                     new ResponseBaseModel<int>() { Body = -1, Message = "Failed to modify the order", StatusCode = 1 };
             }

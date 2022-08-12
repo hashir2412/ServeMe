@@ -17,14 +17,15 @@ export class SearchComponent implements OnInit {
   searchText = '';
   loading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   vendors$: BehaviorSubject<VendorReviewRatingModel[]> = new BehaviorSubject<VendorReviewRatingModel[]>([]);
+  vendorCopy: VendorReviewRatingModel[] = [];
   performSearch() {
     let vendors: VendorReviewRatingModel[] = [];
     if (this.searchType === SearchType.StarRating) {
-      vendors = this.vendors$.value.filter(v => v.stars.toString() === this.searchText);
+      vendors = this.vendorCopy.filter(v => v.stars.toString() === this.searchText);
     } else if (this.searchType === SearchType.Address) {
-      vendors = this.vendors$.value.filter(v => v.address.toLowerCase().includes(this.searchText.toLowerCase()));
+      vendors = this.vendorCopy.filter(v => v.address.toLowerCase().includes(this.searchText.toLowerCase()));
     } else {
-      vendors = this.vendors$.value.filter(v => v.name.toLowerCase().includes(this.searchText.toLowerCase()));
+      vendors = this.vendorCopy.filter(v => v.name.toLowerCase().includes(this.searchText.toLowerCase()));
     }
     this.vendors$.next(vendors);
   }
@@ -35,6 +36,7 @@ export class SearchComponent implements OnInit {
     this.http.get<BaseResponseModel<VendorReviewRatingModel[]>>(ApiUrl.Vendor).subscribe(res => {
       this.loading$.next(false);
       if (res.statusCode === 0) {
+        this.vendorCopy = res.body;
         this.vendors$.next(res.body);
       }
     });

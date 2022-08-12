@@ -15,7 +15,7 @@
             </div>
             <mat-form-field appearance="fill" style="width: 20%;">
                 <mat-label>Choose a date</mat-label>
-                <input matInput type="datetime-local" required min="2022-08-10T00:00:00" [(ngModel)]="service.date">
+                <input matInput type="datetime-local" required [min]="todayDate" [(ngModel)]="service.date">
             </mat-form-field>
         </div>
         <!-- <mat-card class="example-card" *ngFor="let service of items$ | async">
